@@ -55,6 +55,7 @@ object DebugBuild : BuildType({
         vcs {
             watchChangesInDependencies = true
             branchFilter = "+:<default>"
+            // Build will not trigger automatically if the commit message contains comment value.
             triggerRules = "-:comment=<<VERSION_BUMP>>:**"
         }        
 
@@ -156,6 +157,9 @@ object PublicDeployment : BuildType({
         swabra {
             lockingProcesses = Swabra.LockingProcessPolicy.KILL
             verbose = true
+        }
+        sshAgent {
+            teamcitySshKey = "PostSharp.Engineering.Test.GitHub"
         }
     }
 
