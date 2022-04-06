@@ -9,7 +9,7 @@ using PostSharp.Engineering.BuildTools.Build.Solutions;
 using PostSharp.Engineering.BuildTools.Dependencies.Model;
 using Spectre.Console.Cli;
 
-var testFile = Pattern.Create( "testss" );
+var testFile = Pattern.Create( "tests" );
 
 var product = new Product
 {
@@ -23,7 +23,8 @@ var product = new Product
             PublicPublishers: new Publisher[]
             {
                 new TestPublisher( testFile )
-            } ) )
+            } ) ),
+    VcsProvider = VcsProvider.GitHub
 };
 
 var commandApp = new CommandApp();
