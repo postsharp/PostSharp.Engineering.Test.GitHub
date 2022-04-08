@@ -162,6 +162,7 @@ object PublicDeployment : BuildType({
         sshAgent {
             // By convention, the SSH key name is the same as the product name.
             teamcitySshKey = "PostSharp.Engineering.Test.GitHub.Phrased"
+			passphrase = "test"
         }
     }
 
