@@ -17,7 +17,8 @@ project {
    buildType(ReleaseBuild)
    buildType(PublicBuild)
    buildType(PublicDeployment)
-   buildTypesOrder = arrayListOf(DebugBuild,ReleaseBuild,PublicBuild,PublicDeployment)
+   buildType(VersionBump)
+   buildTypesOrder = arrayListOf(DebugBuild,ReleaseBuild,PublicBuild,PublicDeployment,VersionBump)
 }
 
 object DebugBuild : BuildType({
@@ -160,8 +161,8 @@ object PublicDeployment : BuildType({
             verbose = true
         }
         sshAgent {
-            // By convention, the SSH key name is the same as the product name.
-            teamcitySshKey = "PostSharp.Engineering."
+            // By convention, the SSH key name is always PostSharp.Engineering for all repositories using SSH to connect.
+            teamcitySshKey = "PostSharp.Engineering"
         }
     }
 
@@ -179,6 +180,48 @@ object PublicDeployment : BuildType({
         }
 
      }
+
+})
+
+object VersionBump : BuildType({
+
+    name = "Version Bump"
+
+    vcs {
+        root(DslContext.settingsRoot)
+    }
+
+    steps {
+        powerShell {
+            scriptMode = file {
+                path = "Build.ps1"
+            }
+            noProfile = false
+            param("jetbrains_powershell_scriptArguments", "--version bump")
+        }
+    }
+
+    requirements {
+        equals("env.BuildAgentType", "caravela02")
+    }
+
+    features {
+        swabra {
+            lockingProcesses = Swabra.LockingProcessPolicy.KILL
+            verbose = true
+        }
+    }
+
+    triggers {
+
+        finishBuildTrigger {
+            buildType = "Test_PostSharpEngineeringTestGitHub_PublicDeployment"
+            // Only successful deployment will trigger the version bump.
+            successfulOnly = true
+            branchFilter = "+:<default>"
+        }        
+
+    }
 
 })
 

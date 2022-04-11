@@ -11,7 +11,7 @@ using Spectre.Console.Cli;
 
 var testFile = Pattern.Create( "tests" );
 
-var product = new Product
+var product = new Product( TestDependencies.GitHub )
 {
     ProductName = "PostSharp.Engineering.Test.GitHub",
     Solutions = new Solution[] { new DotNetSolution( "src\\PostSharp.Engineering.Test.GitHub.sln" ) },
@@ -23,8 +23,7 @@ var product = new Product
             PublicPublishers: new Publisher[]
             {
                 new TestPublisher( testFile )
-            } ) ),
-    VcsProvider = VcsProvider.GitHub
+            } ) )
 };
 
 var commandApp = new CommandApp();
