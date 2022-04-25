@@ -199,7 +199,7 @@ object VersionBump : BuildType({
                 path = "Build.ps1"
             }
             noProfile = false
-            param("jetbrains_powershell_scriptArguments", "bump version")
+            param("jetbrains_powershell_scriptArguments", "bump")
         }
     }
 
@@ -219,13 +219,6 @@ object VersionBump : BuildType({
     }
 
     triggers {
-
-        finishBuildTrigger {
-            buildType = "Test_PostSharpEngineeringTestGitHub_PublicDeployment"
-            // Only successful deployment will trigger the version bump.
-            successfulOnly = true
-            branchFilter = "+:<default>"
-        }        
 
     }
 
