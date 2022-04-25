@@ -23,7 +23,8 @@ var product = new Product( TestDependencies.GitHub )
             PublicPublishers: new Publisher[]
             {
                 new TestPublisher( testFile )
-            } ) )
+            } ) ),
+    RequiresBranchMerging = true
 };
 
 var commandApp = new CommandApp();
