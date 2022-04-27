@@ -9,7 +9,7 @@ using PostSharp.Engineering.BuildTools.Build.Solutions;
 using PostSharp.Engineering.BuildTools.Dependencies.Model;
 using Spectre.Console.Cli;
 
-var testFile = Pattern.Create( "testsss" );
+var testFile = Pattern.Create( "testssssda" );
 
 var product = new Product( TestDependencies.GitHub )
 {
