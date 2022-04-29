@@ -218,16 +218,5 @@ object VersionBump : BuildType({
         }
     }
 
-    dependencies {
-
-        dependency(PublicDeployment) {
-            snapshot {
-                reuseBuilds = ReuseBuilds.NO
-                onDependencyFailure = FailureAction.FAIL_TO_START
-            }
-        }
-
-     }
-
 })
 
