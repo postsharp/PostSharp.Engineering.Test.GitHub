@@ -13,7 +13,6 @@ var testFile = Pattern.Create( "tess" );
 
 var product = new Product( TestDependencies.GitHub )
 {
-    ProductName = "PostSharp.Engineering.Test.GitHub",
     Solutions = new Solution[] { new DotNetSolution( "src\\PostSharp.Engineering.Test.GitHub.sln" ) },
     PublicArtifacts = Pattern.Create( "PostSharp.Engineering.Test.GitHub.$(PackageVersion).nupkg" ),
     Dependencies = new[] { Dependencies.PostSharpEngineering },
