@@ -1,1 +1,1 @@
-PostSharp.Engineering=1.0.65-beta
+PostSharp.Engineering=1.0.65-preview
