@@ -1,1 +1,1 @@
-PostSharp.Engineering=1.0.67-beta
+PostSharp.Engineering=1.0.67-beta-3
