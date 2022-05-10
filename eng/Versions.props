@@ -11,7 +11,7 @@
     
     <!-- Set the default versions of dependencies -->
     <PropertyGroup>
-        <PostSharpEngineeringVersion>1.0.65-preview</PostSharpEngineeringVersion>
+        <PostSharpEngineeringVersion>1.0.67-beta</PostSharpEngineeringVersion>
     </PropertyGroup>
 
     <!-- Override versions (both this product and dependencies) for the local build -->
