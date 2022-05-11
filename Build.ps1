@@ -7,3 +7,4 @@ if ( $env:VisualStudioVersion -eq $null ) {
 & dotnet run --project "$PSScriptRoot\eng\src\BuildGitHubTestProduct.csproj" -- $args
 exit $LASTEXITCODE
 
+blabla
