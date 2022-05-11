@@ -65,39 +65,6 @@ object DebugBuild : BuildType({
 
 })
 
-object ReleaseBuild : BuildType({
-
-    name = "Build [Release]"
-
-    artifactRules = "+:artifacts/publish/public/**/*=>artifacts/publish/public\n+:artifacts/publish/private/**/*=>artifacts/publish/private"
-
-    vcs {
-        root(DslContext.settingsRoot)
-    }
-
-    steps {
-        powerShell {
-            scriptMode = file {
-                path = "Build.ps1"
-            }
-            noProfile = false
-            param("jetbrains_powershell_scriptArguments", "test --configuration Release --buildNumber %build.number%")
-        }
-    }
-
-    requirements {
-        equals("env.BuildAgentType", "caravela02")
-    }
-
-    features {
-        swabra {
-            lockingProcesses = Swabra.LockingProcessPolicy.KILL
-            verbose = true
-        }
-    }
-
-})
-
 object PublicBuild : BuildType({
 
     name = "Build [Public]"
