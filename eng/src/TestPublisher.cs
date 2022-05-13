@@ -4,6 +4,7 @@
 using PostSharp.Engineering.BuildTools.Build;
 using PostSharp.Engineering.BuildTools.Build.Model;
 using System;
+using System.Threading;
 
 namespace BuildGitHubTestProduct;
 
@@ -25,8 +26,6 @@ internal class TestPublisher : Publisher
             context.Console.WriteMessage( "We are on TeamCity" );
         }
 
-        context.Console.WriteMessage( "Published." );
-        
         return SuccessCode.Success;
     }
 }
