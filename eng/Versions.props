@@ -14,7 +14,7 @@
         <PostSharpEngineeringVersion>1.0.68-beta</PostSharpEngineeringVersion>
 		<MetalamaVersion>0.5.18-preview</MetalamaVersion>
         <MetalamaVersion Condition="$(VcsBranch.StartsWith('dev'))">branch:master</MetalamaVersion>
-		<PostSharpEngineeringTestTransitiveDependencyVersion>1.2.3-preview</PostSharpEngineeringTestTransitiveDependencyVersion>
+		<PostSharpEngineeringTestTransitiveDependencyVersion>1.0.137-preview</PostSharpEngineeringTestTransitiveDependencyVersion>
         <PostSharpEngineeringTestTransitiveDependencyVersion Condition="$(VcsBranch.StartsWith('dev'))">branch:master</PostSharpEngineeringTestTransitiveDependencyVersion>
     </PropertyGroup>
 
