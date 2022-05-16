@@ -29,7 +29,7 @@ internal class TestPublisher : Publisher
         
         if ( TeamCityHelper.IsTeamCityBuild( settings ) )
         {
-            context.Console.WriteMessage( "We are on TeamCity" );
+            context.Console.WriteMessage( "We are on TeamCity." );
         }
         
         if ( hasEnvironmentError )
@@ -39,12 +39,14 @@ internal class TestPublisher : Publisher
 
         if ( settings.Dry )
         {
-            context.Console.WriteImportantMessage( $"Dry run: publishing test" );
+            context.Console.WriteImportantMessage( "Dry run: publishing test." );
 
             return SuccessCode.Success;
         }
         else
         {
+			context.Console.WriteImportantMessage ( "Running regular test publisher." ); 
+			
             return ToolInvocationHelper.InvokeTool(
                 context.Console,
                 "git",
