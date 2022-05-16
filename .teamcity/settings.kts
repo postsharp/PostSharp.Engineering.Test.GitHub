@@ -72,6 +72,47 @@ object DebugBuild : BuildType({
 
 })
 
+object PublicBuild : BuildType({
+
+    name = "Build [Public]"
+
+    artifactRules = "+:artifacts/publish/public/**/*=>artifacts/publish/public\n+:artifacts/publish/private/**/*=>artifacts/publish/private"
+
+    vcs {
+        root(DslContext.settingsRoot)
+    }
+
+    steps {
+        powerShell {
+            scriptMode = file {
+                path = "Build.ps1"
+            }
+            noProfile = false
+            param("jetbrains_powershell_scriptArguments", "test --configuration Public --buildNumber %build.number%")
+        }
+    }
+
+    requirements {
+        equals("env.BuildAgentType", "caravela02")
+    }
+
+    features {
+        swabra {
+            lockingProcesses = Swabra.LockingProcessPolicy.KILL
+            verbose = true
+        }
+    }
+
+    dependencies {
+
+        snapshot(AbsoluteId("Test_PostSharpEngineeringTestTransitiveDependency_PublicBuild")) {
+                     onDependencyFailure = FailureAction.FAIL_TO_START
+                }
+
+     }
+
+})
+
 object PublicDeployment : BuildType({
 
     name = "Deploy [Public]"
