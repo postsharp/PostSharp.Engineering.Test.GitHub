@@ -10,8 +10,6 @@ using PostSharp.Engineering.BuildTools.Build.Solutions;
 using PostSharp.Engineering.BuildTools.Dependencies.Model;
 using Spectre.Console.Cli;
 
-var testFile = Pattern.Create( "tests" );
-
 var product = new Product( TestDependencies.GitHub )
 {
     Solutions = new Solution[] { new DotNetSolution( "src\\PostSharp.Engineering.Test.GitHub.sln" ) },
