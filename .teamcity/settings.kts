@@ -14,11 +14,10 @@ version = "2021.2"
 project {
 
    buildType(DebugBuild)
-   buildType(ReleaseBuild)
    buildType(PublicBuild)
    buildType(PublicDeployment)
    buildType(VersionBump)
-   buildTypesOrder = arrayListOf(DebugBuild,ReleaseBuild,PublicBuild,PublicDeployment,VersionBump)
+   buildTypesOrder = arrayListOf(DebugBuild,PublicBuild,PublicDeployment,VersionBump)
 }
 
 object DebugBuild : BuildType({
