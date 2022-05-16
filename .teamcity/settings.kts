@@ -65,10 +65,6 @@ object DebugBuild : BuildType({
 
     dependencies {
 
-        snapshot(AbsoluteId("Metalama_Metalama_DebugBuild")) {
-                     onDependencyFailure = FailureAction.FAIL_TO_START
-                }
-
         snapshot(AbsoluteId("Test_PostSharpEngineeringTestTransitiveDependency_DebugBuild")) {
                      onDependencyFailure = FailureAction.FAIL_TO_START
                 }
@@ -110,10 +106,6 @@ object ReleaseBuild : BuildType({
 
     dependencies {
 
-        snapshot(AbsoluteId("Metalama_Metalama_ReleaseBuild")) {
-                     onDependencyFailure = FailureAction.FAIL_TO_START
-                }
-
         snapshot(AbsoluteId("Test_PostSharpEngineeringTestTransitiveDependency_ReleaseBuild")) {
                      onDependencyFailure = FailureAction.FAIL_TO_START
                 }
@@ -154,10 +146,6 @@ object PublicBuild : BuildType({
     }
 
     dependencies {
-
-        snapshot(AbsoluteId("Metalama_Metalama_PublicBuild")) {
-                     onDependencyFailure = FailureAction.FAIL_TO_START
-                }
 
         snapshot(AbsoluteId("Test_PostSharpEngineeringTestTransitiveDependency_PublicBuild")) {
                      onDependencyFailure = FailureAction.FAIL_TO_START
@@ -203,10 +191,6 @@ object PublicDeployment : BuildType({
     }
 
     dependencies {
-
-        snapshot(AbsoluteId("Metalama_Metalama_PublicDeployment")) {
-                     onDependencyFailure = FailureAction.FAIL_TO_START
-                }
 
         snapshot(AbsoluteId("Test_PostSharpEngineeringTestTransitiveDependency_PublicDeployment")) {
                      onDependencyFailure = FailureAction.FAIL_TO_START

@@ -14,7 +14,7 @@ var product = new Product( TestDependencies.GitHub )
 {
     Solutions = new Solution[] { new DotNetSolution( "src\\PostSharp.Engineering.Test.GitHub.sln" ) },
     PublicArtifacts = Pattern.Create( "PostSharp.Engineering.Test.GitHub.$(PackageVersion).nupkg" ),
-    Dependencies = new[] { Dependencies.PostSharpEngineering, Dependencies.Metalama, TestDependencies.TransitiveDependency },
+    Dependencies = new[] { Dependencies.PostSharpEngineering, TestDependencies.TransitiveDependency },
     Configurations = Product.DefaultConfigurations
         .WithValue( BuildConfiguration.Public, new BuildConfigurationInfo( 
             MSBuildName: "Release",
