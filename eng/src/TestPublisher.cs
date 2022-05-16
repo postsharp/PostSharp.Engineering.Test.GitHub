@@ -45,8 +45,8 @@ internal class TestPublisher : Publisher
         }
         else
         {
-			context.Console.WriteImportantMessage ( "Running regular test publisher." ); 
-			
+            context.Console.WriteImportantMessage ( "Running regular test publisher." ); 
+            
             return ToolInvocationHelper.InvokeTool(
                 context.Console,
                 "git",
