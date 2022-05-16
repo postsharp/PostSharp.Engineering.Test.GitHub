@@ -12,9 +12,9 @@
     <!-- Set the default versions of dependencies -->
     <PropertyGroup>
         <PostSharpEngineeringVersion>1.0.68-beta-2</PostSharpEngineeringVersion>
-		<MetalamaVersion>0.5.18-preview</MetalamaVersion>
+		<MetalamaVersion>0.5.10-preview</MetalamaVersion>
         <MetalamaVersion Condition="$(VcsBranch.StartsWith('dev'))">branch:master</MetalamaVersion>
-		<PostSharpEngineeringTestTransitiveDependencyVersion>1.0.137-preview</PostSharpEngineeringTestTransitiveDependencyVersion>
+		<PostSharpEngineeringTestTransitiveDependencyVersion>1.0.130-preview</PostSharpEngineeringTestTransitiveDependencyVersion>
         <PostSharpEngineeringTestTransitiveDependencyVersion Condition="$(VcsBranch.StartsWith('dev'))">branch:master</PostSharpEngineeringTestTransitiveDependencyVersion>
     </PropertyGroup>
 
