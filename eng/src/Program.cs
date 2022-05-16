@@ -22,7 +22,7 @@ var product = new Product( TestDependencies.GitHub )
             MSBuildName: "Release",
             PublicPublishers: new Publisher[]
             {
-                new TestPublisher( testFile ),
+                new TestPublisher( Pattern.Create( "PostSharp.Engineering.Test.GitHub.$(PackageVersion).nupkg" ) ),
                 new MergePublisher ( Pattern.Create( "PostSharp.Engineering.Test.GitHub.$(PackageVersion).nupkg" ) )
             } ) ),
     RequiresBranchMerging = true
