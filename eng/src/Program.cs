@@ -10,7 +10,9 @@ using PostSharp.Engineering.BuildTools.Build.Solutions;
 using PostSharp.Engineering.BuildTools.Dependencies.Model;
 using Spectre.Console.Cli;
 
-var testFile = Pattern.Create( "test" );
+var testFile = Pattern.Create( "PostSharp.Engineering.Test.GitHub.$(PackageVersion).nupkg" );
+
+var versionsFile = Pattern.Create( "PostSharp.Engineering.Test.GitHub.version.props" );
 
 var product = new Product( TestDependencies.GitHub )
 {
@@ -22,8 +24,12 @@ var product = new Product( TestDependencies.GitHub )
             MSBuildName: "Release",
             PublicPublishers: new Publisher[]
             {
-                new TestPublisher( testFile ),
-                new MergePublisher ( Pattern.Create( "PostSharp.Engineering.Test.GitHub.$(PackageVersion).nupkg" ) )
+                new TestPublisher( testFile )
+                //new MergePublisher ( versionsFile )
+            },
+            PrivatePublishers: new Publisher[]
+            {
+                new MergePublisher ( versionsFile )
             } ) ),
     RequiresBranchMerging = true
 };

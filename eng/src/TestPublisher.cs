@@ -3,6 +3,8 @@
 
 using PostSharp.Engineering.BuildTools.Build;
 using PostSharp.Engineering.BuildTools.Build.Model;
+using PostSharp.Engineering.BuildTools.ContinuousIntegration;
+using PostSharp.Engineering.BuildTools.Utilities;
 using System;
 using System.Threading;
 
@@ -21,11 +23,35 @@ internal class TestPublisher : Publisher
         BuildInfo buildInfo,
         BuildConfigurationInfo configuration )
     {
-        if ( Environment.GetEnvironmentVariable( "TEAMCITY_GIT_PATH" ) != null )
+        var hasEnvironmentError = false;
+
+        context.Console.WriteMessage( $"Publishing {file}." );
+        
+        if ( TeamCityHelper.IsTeamCityBuild( settings ) )
         {
             context.Console.WriteMessage( "We are on TeamCity" );
         }
+        
+        if ( hasEnvironmentError )
+        {
+            return SuccessCode.Fatal;
+        }
 
-        return SuccessCode.Success;
+        if ( settings.Dry )
+        {
+            context.Console.WriteImportantMessage( $"Dry run: publishing test" );
+
+            return SuccessCode.Success;
+        }
+        else
+        {
+            return ToolInvocationHelper.InvokeTool(
+                context.Console,
+                "git",
+                "--version",
+                Environment.CurrentDirectory )
+                ? SuccessCode.Success
+                : SuccessCode.Error;
+        }
     }
 }
