@@ -9,31 +9,28 @@ using System;
 
 namespace BuildGitHubTestProduct;
 
-internal class TestPublisher : ArtifactPublisher
+internal class TestPublisher : Publisher
 {
-    public TestPublisher(Pattern files) : base(files)
+    private Pattern Files { get; }
+
+    public TestPublisher( Pattern files )
     {
+        this.Files = files;
     }
 
-    public override SuccessCode Execute(
+    public SuccessCode Execute(
         BuildContext context,
         PublishSettings settings,
-        string? file,
         BuildInfo buildInfo,
         BuildConfigurationInfo configuration )
     {
-        var hasEnvironmentError = false;
+        context.Console.WriteHeading( "Running regular test publisher..." );
 
-        context.Console.WriteMessage( $"Publishing {file}." );
+        context.Console.WriteMessage( $"Publishing {this.Files}." );
         
         if ( TeamCityHelper.IsTeamCityBuild( settings ) )
         {
             context.Console.WriteMessage( "We are on TeamCity." );
-        }
-        
-        if ( hasEnvironmentError )
-        {
-            return SuccessCode.Fatal;
         }
 
         if ( settings.Dry )
@@ -44,7 +41,6 @@ internal class TestPublisher : ArtifactPublisher
         }
         else
         {
-            context.Console.WriteImportantMessage ( "Running regular test publisher..." ); 
             
             return ToolInvocationHelper.InvokeTool(
                 context.Console,
@@ -54,5 +50,41 @@ internal class TestPublisher : ArtifactPublisher
                 ? SuccessCode.Success
                 : SuccessCode.Error;
         }
+    }
+        
+    protected sealed override bool Publish(
+        BuildContext context,
+        PublishSettings settings,
+        (string Private, string Public) directories,
+        BuildConfigurationInfo configuration,
+        BuildInfo buildInfo,
+        bool isPublic,
+        ref bool hasTarget )
+    {
+        var success = true;
+            
+        switch ( this.Execute( context, settings, buildInfo, configuration ) )
+        {
+            case SuccessCode.Success:
+                break;
+
+            case SuccessCode.Error:
+                success = false;
+
+                break;
+
+            case SuccessCode.Fatal:
+                return false;
+
+            default:
+                throw new NotImplementedException();
+        }
+
+        if ( !success )
+        {
+            context.Console.WriteError( "Independent publishing has failed." );
+        }
+
+        return success;
     }
 }
