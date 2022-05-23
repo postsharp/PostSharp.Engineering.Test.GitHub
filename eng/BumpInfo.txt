@@ -1,1 +1,1 @@
-PostSharp.Engineering=1.0.67.2551-local-JanHlavac-debug;PostSharp.Engineering.Test.TransitiveDependency=1.0.140-preview
+PostSharp.Engineering=1.0.68-beta-4;PostSharp.Engineering.Test.TransitiveDependency=1.0.140-preview
