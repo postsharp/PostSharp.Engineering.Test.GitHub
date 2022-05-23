@@ -21,9 +21,8 @@ var product = new Product( TestDependencies.GitHub )
             PublicPublishers: new Publisher[]
             {
                 new TestPublisher( Pattern.Create( "PostSharp.Engineering.Test.GitHub.$(PackageVersion).nupkg" ) ),
-                new MergePublisher ( Pattern.Create( "PostSharp.Engineering.Test.GitHub.$(PackageVersion).nupkg" ) )
-            } ) ),
-    RequiresBranchMerging = true
+                new MergePublisher()
+            } ) )
 };
 
 var commandApp = new CommandApp();

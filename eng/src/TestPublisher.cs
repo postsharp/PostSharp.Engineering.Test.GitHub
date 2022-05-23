@@ -6,7 +6,6 @@ using PostSharp.Engineering.BuildTools.Build.Model;
 using PostSharp.Engineering.BuildTools.ContinuousIntegration;
 using PostSharp.Engineering.BuildTools.Utilities;
 using System;
-using System.Threading;
 
 namespace BuildGitHubTestProduct;
 
@@ -19,7 +18,7 @@ internal class TestPublisher : Publisher
     public override SuccessCode Execute(
         BuildContext context,
         PublishSettings settings,
-        string file,
+        string? file,
         BuildInfo buildInfo,
         BuildConfigurationInfo configuration )
     {
