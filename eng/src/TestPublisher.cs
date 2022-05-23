@@ -9,7 +9,7 @@ using System;
 
 namespace BuildGitHubTestProduct;
 
-internal class TestPublisher : Publisher
+internal class TestPublisher : ArtifactPublisher
 {
     public TestPublisher(Pattern files) : base(files)
     {

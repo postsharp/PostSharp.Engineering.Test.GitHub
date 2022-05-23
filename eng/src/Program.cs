@@ -20,7 +20,7 @@ var product = new Product( TestDependencies.GitHub )
             MSBuildName: "Release",
             PublicPublishers: new Publisher[]
             {
-                new TestPublisher( Pattern.Create( "PostSharp.Engineering.Test.GitHub.$(PackageVersion).nupkg" ) ),
+                new TestPublisher( Pattern.Create( "*.nupkg" ) ),
                 new MergePublisher()
             } ) )
 };
