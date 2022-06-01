@@ -200,7 +200,7 @@ object VersionBump : BuildType({
         }
         sshAgent {
             // By convention, the SSH key name is always PostSharp.Engineering for all repositories using SSH to connect.
-            teamcitySshKey = "PostSharp.Engineering"
+            teamcitySshKey = "PostSharp.Engineering.Ssh.Key"
         }
     }
 
