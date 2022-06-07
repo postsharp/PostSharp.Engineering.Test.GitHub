@@ -82,7 +82,7 @@ internal class TestPublisher : Publisher
 
         if ( !success )
         {
-            context.Console.WriteError( "Independent publishing has failed." );
+            context.Console.WriteError( "Test publishing has failed." );
         }
 
         return success;

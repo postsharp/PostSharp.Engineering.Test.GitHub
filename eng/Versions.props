@@ -11,7 +11,7 @@
     
     <!-- Set the default versions of dependencies -->
     <PropertyGroup>
-        <PostSharpEngineeringVersion>1.0.68-preview</PostSharpEngineeringVersion>
+        <PostSharpEngineeringVersion>1.0.70-preview</PostSharpEngineeringVersion>
 		<PostSharpEngineeringTestTransitiveDependencyVersion>1.0.140-preview</PostSharpEngineeringTestTransitiveDependencyVersion>
         <PostSharpEngineeringTestTransitiveDependencyVersion Condition="$(VcsBranch.StartsWith('dev'))">branch:master</PostSharpEngineeringTestTransitiveDependencyVersion>
     </PropertyGroup>
