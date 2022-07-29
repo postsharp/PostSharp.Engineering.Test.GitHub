@@ -1,4 +1,4 @@
-﻿// Copyright (c) SharpCrafters s.r.o. All rights reserved. Released under the MIT license.
+// Copyright (c) SharpCrafters s.r.o. All rights reserved. Released under the MIT license.
 
 using BuildGitHubTestProduct;
 using PostSharp.Engineering.BuildTools;
