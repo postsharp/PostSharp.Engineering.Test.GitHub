@@ -40,7 +40,7 @@ internal class TestPublisher : Publisher
         }
         else
         {
-            
+            var testchange = "null";
             return ToolInvocationHelper.InvokeTool(
                 context.Console,
                 "git",
