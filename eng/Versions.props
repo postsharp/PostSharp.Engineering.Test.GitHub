@@ -12,8 +12,8 @@
     <!-- Set the default versions of dependencies -->
     <PropertyGroup>
         <PostSharpEngineeringVersion>1.0.89-preview</PostSharpEngineeringVersion>
-		<PostSharpEngineeringTestTransitiveDependencyVersion>1.0.151-preview</PostSharpEngineeringTestTransitiveDependencyVersion>
-        <PostSharpEngineeringTestTransitiveDependencyVersion Condition="$(VcsBranch.StartsWith('dev'))">branch:master</PostSharpEngineeringTestTransitiveDependencyVersion>
+		<PostSharpEngineeringTestTestProductVersion>1.1.59-preview</PostSharpEngineeringTestTestProductVersion>
+        <PostSharpEngineeringTestTestProductVersion Condition="$(VcsBranch.StartsWith('dev'))">branch:master</PostSharpEngineeringTestTestProductVersion>
     </PropertyGroup>
 
     <!-- Override versions (both this product and dependencies) for the local build -->
