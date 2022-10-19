@@ -51,7 +51,7 @@ object DebugBuild : BuildType({
     }
 
     requirements {
-        equals("env.BuildAgentType", "caravela02")
+        equals("env.BuildAgentType", "caravela03")
     }
 
     features {
@@ -74,7 +74,7 @@ object DebugBuild : BuildType({
 
     dependencies {
 
-        snapshot(AbsoluteId("Test_PostSharpEngineeringTestTransitiveDependency_DebugBuild")) {
+        snapshot(AbsoluteId("Test_PostSharpEngineeringTestTestProduct_DebugBuild")) {
                      onDependencyFailure = FailureAction.FAIL_TO_START
                 }
 
@@ -113,7 +113,7 @@ object PublicBuild : BuildType({
     }
 
     requirements {
-        equals("env.BuildAgentType", "caravela02")
+        equals("env.BuildAgentType", "caravela03")
     }
 
     features {
@@ -125,7 +125,7 @@ object PublicBuild : BuildType({
 
     dependencies {
 
-        snapshot(AbsoluteId("Test_PostSharpEngineeringTestTransitiveDependency_PublicBuild")) {
+        snapshot(AbsoluteId("Test_PostSharpEngineeringTestTestProduct_PublicBuild")) {
                      onDependencyFailure = FailureAction.FAIL_TO_START
                 }
 
@@ -155,7 +155,7 @@ object PublicDeployment : BuildType({
     }
 
     requirements {
-        equals("env.BuildAgentType", "caravela02")
+        equals("env.BuildAgentType", "caravela03")
     }
 
     features {
@@ -171,7 +171,7 @@ object PublicDeployment : BuildType({
 
     dependencies {
 
-        snapshot(AbsoluteId("Test_PostSharpEngineeringTestTransitiveDependency_PublicDeployment")) {
+        snapshot(AbsoluteId("Test_PostSharpEngineeringTestTestProduct_PublicDeployment")) {
                      onDependencyFailure = FailureAction.FAIL_TO_START
                 }
 
@@ -212,7 +212,7 @@ object VersionBump : BuildType({
     }
 
     requirements {
-        equals("env.BuildAgentType", "caravela02")
+        equals("env.BuildAgentType", "caravela03")
     }
 
     features {
