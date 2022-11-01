@@ -13,8 +13,8 @@
     <!-- Set the default versions of dependencies -->
     <PropertyGroup>
         <PostSharpEngineeringVersion>1.0.100-preview</PostSharpEngineeringVersion>
-		<PostSharpEngineeringTestTestProductVersion Condition="$(VcsBranch.StartsWith('master'))">1.1.63-preview</PostSharpEngineeringTestTestProductVersion>
         <PostSharpEngineeringTestTestProductVersion>branch:master</PostSharpEngineeringTestTestProductVersion>
+		<PostSharpEngineeringTestTestProductVersion Condition="$(VcsBranch.StartsWith('master'))">1.1.14-preview</PostSharpEngineeringTestTestProductVersion>
     </PropertyGroup>
 
     <!-- Override versions (both this product and dependencies) for the local build -->
