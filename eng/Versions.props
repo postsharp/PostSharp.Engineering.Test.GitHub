@@ -12,7 +12,7 @@
     
     <!-- Set the default versions of dependencies -->
     <PropertyGroup>
-        <PostSharpEngineeringVersion>1.0.101-alpha.2</PostSharpEngineeringVersion>
+        <PostSharpEngineeringVersion>1.0.101-alpha.3</PostSharpEngineeringVersion>
         <PostSharpEngineeringTestTestProductVersion>branch:master</PostSharpEngineeringTestTestProductVersion>
 		<PostSharpEngineeringTestTestProductVersion Condition="$(VcsBranch.StartsWith('master'))">1.1.64-preview</PostSharpEngineeringTestTestProductVersion>
     </PropertyGroup>
