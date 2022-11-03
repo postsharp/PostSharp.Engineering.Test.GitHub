@@ -1,1 +1,1 @@
-{"Dependencies":{"PostSharp.Engineering":"1.0.100","PostSharp.Engineering.Test.TestProduct":"1.1.65"}}
+{"Dependencies":{"PostSharp.Engineering":"1.0.101","PostSharp.Engineering.Test.TestProduct":"1.1.65"}}
