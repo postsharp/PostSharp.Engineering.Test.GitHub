@@ -21,7 +21,8 @@ var product = new Product( TestDependencies.GitHub )
             {
                 new TestPublisher( Pattern.Create( "*.nupkg" ) ),
                 new MergePublisher()
-            } ) )
+            } ) ),
+	BuildAgentType = "caravela04"
 };
 
 var commandApp = new CommandApp();
