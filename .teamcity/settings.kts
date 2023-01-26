@@ -16,8 +16,9 @@ project {
    buildType(DebugBuild)
    buildType(PublicBuild)
    buildType(PublicDeployment)
+   buildType(PublicDeploymentStandalone)
    buildType(VersionBump)
-   buildTypesOrder = arrayListOf(DebugBuild,PublicBuild,PublicDeployment,VersionBump)
+   buildTypesOrder = arrayListOf(DebugBuild,PublicBuild,PublicDeployment,PublicDeploymentStandalone,VersionBump)
 }
 
 object DebugBuild : BuildType({
@@ -174,6 +175,59 @@ object PublicDeployment : BuildType({
         snapshot(AbsoluteId("Test_PostSharpEngineeringTestTestProduct_PublicDeployment")) {
                      onDependencyFailure = FailureAction.FAIL_TO_START
                 }
+
+        dependency(PublicBuild) {
+            snapshot {
+                onDependencyFailure = FailureAction.FAIL_TO_START
+            }
+
+            artifacts {
+                cleanDestination = true
+                artifactRules = "+:artifacts/publish/public/**/*=>artifacts/publish/public\n+:artifacts/publish/private/**/*=>artifacts/publish/private\n+:artifacts/testResults/**/*=>artifacts/testResults"
+            }
+        }
+
+     }
+
+})
+
+object PublicDeploymentStandalone : BuildType({
+
+    name = "Standalone deploy [Public]"
+
+    type = Type.DEPLOYMENT
+
+    vcs {
+        root(DslContext.settingsRoot)
+    }
+
+    steps {
+        powerShell {
+            name = "Standalone deploy [Public]"
+            scriptMode = file {
+                path = "Build.ps1"
+            }
+            noProfile = false
+            param("jetbrains_powershell_scriptArguments", "publish --configuration Public")
+        }
+    }
+
+    requirements {
+        equals("env.BuildAgentType", "caravela04")
+    }
+
+    features {
+        swabra {
+            lockingProcesses = Swabra.LockingProcessPolicy.KILL
+            verbose = true
+        }
+        sshAgent {
+            // By convention, the SSH key name is always PostSharp.Engineering for all repositories using SSH to connect.
+            teamcitySshKey = "PostSharp.Engineering"
+        }
+    }
+
+    dependencies {
 
         dependency(PublicBuild) {
             snapshot {
