@@ -14,7 +14,6 @@
     <PropertyGroup>
         <PostSharpEngineeringVersion>2023.1.8-preview</PostSharpEngineeringVersion>
         <PostSharpEngineeringTestTestProductVersion>2023.1.0-preview</PostSharpEngineeringTestTestProductVersion>
-		<PostSharpEngineeringTestTestProductVersion Condition="$(VcsBranch)!=''">branch:master</PostSharpEngineeringTestTestProductVersion>
     </PropertyGroup>
 
     <!-- Override versions (both this product and dependencies) for the local build -->
