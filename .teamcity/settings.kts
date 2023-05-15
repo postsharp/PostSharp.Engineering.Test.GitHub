@@ -16,9 +16,8 @@ project {
    buildType(DebugBuild)
    buildType(PublicBuild)
    buildType(PublicDeployment)
-   buildType(PublicDeploymentStandalone)
    buildType(VersionBump)
-   buildTypesOrder = arrayListOf(DebugBuild,PublicBuild,PublicDeployment,PublicDeploymentStandalone,VersionBump)
+   buildTypesOrder = arrayListOf(DebugBuild,PublicBuild,PublicDeployment,VersionBump)
 }
 
 object DebugBuild : BuildType({
@@ -29,7 +28,8 @@ object DebugBuild : BuildType({
 
     vcs {
         root(DslContext.settingsRoot)
-    }
+
+        }
 
     steps {
         // Step to kill all dotnet or VBCSCompiler processes that might be locking files we delete in during cleanup.
@@ -47,12 +47,12 @@ object DebugBuild : BuildType({
                 path = "Build.ps1"
             }
             noProfile = false
-            param("jetbrains_powershell_scriptArguments", "test --configuration Debug --buildNumber %build.number%")
+            param("jetbrains_powershell_scriptArguments", "test --configuration Debug --buildNumber %build.number% --buildType %system.teamcity.buildType.id%")
         }
     }
 
     requirements {
-        equals("env.BuildAgentType", "caravela04")
+        equals("env.BuildAgentType", "caravela04cloud")
     }
 
     features {
@@ -75,9 +75,18 @@ object DebugBuild : BuildType({
 
     dependencies {
 
-        snapshot(AbsoluteId("Test_PostSharpEngineeringTestTestProduct_DebugBuild")) {
+        dependency(AbsoluteId("Test_Test20231_TestProduct_DebugBuild")) {
+            snapshot {
                      onDependencyFailure = FailureAction.FAIL_TO_START
-                }
+            }
+
+
+            artifacts {
+                cleanDestination = true
+                artifactRules = "+:artifacts/publish/private/**/*=>dependencies/PostSharp.Engineering.Test.TestProduct"
+            }
+
+        }
 
      }
 
@@ -91,7 +100,8 @@ object PublicBuild : BuildType({
 
     vcs {
         root(DslContext.settingsRoot)
-    }
+
+        }
 
     steps {
         // Step to kill all dotnet or VBCSCompiler processes that might be locking files we delete in during cleanup.
@@ -109,12 +119,12 @@ object PublicBuild : BuildType({
                 path = "Build.ps1"
             }
             noProfile = false
-            param("jetbrains_powershell_scriptArguments", "test --configuration Public --buildNumber %build.number%")
+            param("jetbrains_powershell_scriptArguments", "test --configuration Public --buildNumber %build.number% --buildType %system.teamcity.buildType.id%")
         }
     }
 
     requirements {
-        equals("env.BuildAgentType", "caravela04")
+        equals("env.BuildAgentType", "caravela04cloud")
     }
 
     features {
@@ -126,9 +136,18 @@ object PublicBuild : BuildType({
 
     dependencies {
 
-        snapshot(AbsoluteId("Test_PostSharpEngineeringTestTestProduct_PublicBuild")) {
+        dependency(AbsoluteId("Test_Test20231_TestProduct_PublicBuild")) {
+            snapshot {
                      onDependencyFailure = FailureAction.FAIL_TO_START
-                }
+            }
+
+
+            artifacts {
+                cleanDestination = true
+                artifactRules = "+:artifacts/publish/private/**/*=>dependencies/PostSharp.Engineering.Test.TestProduct"
+            }
+
+        }
 
      }
 
@@ -142,7 +161,8 @@ object PublicDeployment : BuildType({
 
     vcs {
         root(DslContext.settingsRoot)
-    }
+
+        }
 
     steps {
         powerShell {
@@ -156,7 +176,7 @@ object PublicDeployment : BuildType({
     }
 
     requirements {
-        equals("env.BuildAgentType", "caravela04")
+        equals("env.BuildAgentType", "caravela04cloud")
     }
 
     features {
@@ -172,72 +192,38 @@ object PublicDeployment : BuildType({
 
     dependencies {
 
-        snapshot(AbsoluteId("Test_PostSharpEngineeringTestTestProduct_PublicDeployment")) {
+        dependency(PublicBuild) {
+            snapshot {
                      onDependencyFailure = FailureAction.FAIL_TO_START
-                }
-
-        dependency(PublicBuild) {
-            snapshot {
-                onDependencyFailure = FailureAction.FAIL_TO_START
             }
+
 
             artifacts {
                 cleanDestination = true
                 artifactRules = "+:artifacts/publish/public/**/*=>artifacts/publish/public\n+:artifacts/publish/private/**/*=>artifacts/publish/private\n+:artifacts/testResults/**/*=>artifacts/testResults"
             }
+
         }
 
-     }
-
-})
-
-object PublicDeploymentStandalone : BuildType({
-
-    name = "Standalone deploy [Public]"
-
-    type = Type.DEPLOYMENT
-
-    vcs {
-        root(DslContext.settingsRoot)
-    }
-
-    steps {
-        powerShell {
-            name = "Standalone deploy [Public]"
-            scriptMode = file {
-                path = "Build.ps1"
-            }
-            noProfile = false
-            param("jetbrains_powershell_scriptArguments", "publish --configuration Public")
-        }
-    }
-
-    requirements {
-        equals("env.BuildAgentType", "caravela04")
-    }
-
-    features {
-        swabra {
-            lockingProcesses = Swabra.LockingProcessPolicy.KILL
-            verbose = true
-        }
-        sshAgent {
-            // By convention, the SSH key name is always PostSharp.Engineering for all repositories using SSH to connect.
-            teamcitySshKey = "PostSharp.Engineering"
-        }
-    }
-
-    dependencies {
-
-        dependency(PublicBuild) {
+        dependency(AbsoluteId("Test_Test20231_TestProduct_PublicBuild")) {
             snapshot {
-                onDependencyFailure = FailureAction.FAIL_TO_START
+                     onDependencyFailure = FailureAction.FAIL_TO_START
             }
+
 
             artifacts {
                 cleanDestination = true
-                artifactRules = "+:artifacts/publish/public/**/*=>artifacts/publish/public\n+:artifacts/publish/private/**/*=>artifacts/publish/private\n+:artifacts/testResults/**/*=>artifacts/testResults"
+                artifactRules = "+:artifacts/publish/private/**/*=>dependencies/PostSharp.Engineering.Test.TestProduct"
             }
+
+        }
+
+        dependency(AbsoluteId("Test_Test20231_TestProduct_PublicDeployment")) {
+            snapshot {
+                     onDependencyFailure = FailureAction.FAIL_TO_START
+            }
+
+
         }
 
      }
@@ -252,7 +238,8 @@ object VersionBump : BuildType({
 
     vcs {
         root(DslContext.settingsRoot)
-    }
+
+        }
 
     steps {
         powerShell {
@@ -266,7 +253,7 @@ object VersionBump : BuildType({
     }
 
     requirements {
-        equals("env.BuildAgentType", "caravela04")
+        equals("env.BuildAgentType", "caravela04cloud")
     }
 
     features {
