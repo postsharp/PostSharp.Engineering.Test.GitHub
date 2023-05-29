@@ -17,7 +17,8 @@ project {
    buildType(PublicBuild)
    buildType(PublicDeployment)
    buildType(VersionBump)
-   buildTypesOrder = arrayListOf(DebugBuild,PublicBuild,PublicDeployment,VersionBump)
+   buildType(DownstreamMerge)
+   buildTypesOrder = arrayListOf(DebugBuild,PublicBuild,PublicDeployment,VersionBump,DownstreamMerge)
 }
 
 object DebugBuild : BuildType({
@@ -28,7 +29,8 @@ object DebugBuild : BuildType({
 
     vcs {
         root(DslContext.settingsRoot)
-    }
+
+        }
 
     steps {
         // Step to kill all dotnet or VBCSCompiler processes that might be locking files we delete in during cleanup.
@@ -46,7 +48,7 @@ object DebugBuild : BuildType({
                 path = "Build.ps1"
             }
             noProfile = false
-            param("jetbrains_powershell_scriptArguments", "test --configuration Debug --buildNumber %build.number%")
+            param("jetbrains_powershell_scriptArguments", "test --configuration Debug --buildNumber %build.number% --buildType %system.teamcity.buildType.id%")
         }
     }
 
@@ -61,22 +63,20 @@ object DebugBuild : BuildType({
         }
     }
 
-    triggers {
-
-        vcs {
-            watchChangesInDependencies = true
-            branchFilter = "+:<default>"
-            // Build will not trigger automatically if the commit message contains comment value.
-            triggerRules = "-:comment=<<VERSION_BUMP>>|<<DEPENDENCIES_UPDATED>>:**"
-        }        
-
-    }
-
     dependencies {
 
-        snapshot(AbsoluteId("Test_PostSharpEngineeringTestTestProduct_DebugBuild")) {
+        dependency(AbsoluteId("Test_PostSharpEngineeringTestTestProduct_DebugBuild")) {
+            snapshot {
                      onDependencyFailure = FailureAction.FAIL_TO_START
-                }
+            }
+
+
+            artifacts {
+                cleanDestination = true
+                artifactRules = "+:artifacts/publish/private/**/*=>dependencies/PostSharp.Engineering.Test.TestProduct"
+            }
+
+        }
 
      }
 
@@ -90,7 +90,8 @@ object PublicBuild : BuildType({
 
     vcs {
         root(DslContext.settingsRoot)
-    }
+
+        }
 
     steps {
         // Step to kill all dotnet or VBCSCompiler processes that might be locking files we delete in during cleanup.
@@ -108,7 +109,7 @@ object PublicBuild : BuildType({
                 path = "Build.ps1"
             }
             noProfile = false
-            param("jetbrains_powershell_scriptArguments", "test --configuration Public --buildNumber %build.number%")
+            param("jetbrains_powershell_scriptArguments", "test --configuration Public --buildNumber %build.number% --buildType %system.teamcity.buildType.id%")
         }
     }
 
@@ -125,9 +126,18 @@ object PublicBuild : BuildType({
 
     dependencies {
 
-        snapshot(AbsoluteId("Test_PostSharpEngineeringTestTestProduct_PublicBuild")) {
+        dependency(AbsoluteId("Test_PostSharpEngineeringTestTestProduct_PublicBuild")) {
+            snapshot {
                      onDependencyFailure = FailureAction.FAIL_TO_START
-                }
+            }
+
+
+            artifacts {
+                cleanDestination = true
+                artifactRules = "+:artifacts/publish/private/**/*=>dependencies/PostSharp.Engineering.Test.TestProduct"
+            }
+
+        }
 
      }
 
@@ -141,7 +151,8 @@ object PublicDeployment : BuildType({
 
     vcs {
         root(DslContext.settingsRoot)
-    }
+
+        }
 
     steps {
         powerShell {
@@ -171,19 +182,38 @@ object PublicDeployment : BuildType({
 
     dependencies {
 
-        snapshot(AbsoluteId("Test_PostSharpEngineeringTestTestProduct_PublicDeployment")) {
-                     onDependencyFailure = FailureAction.FAIL_TO_START
-                }
-
         dependency(PublicBuild) {
             snapshot {
-                onDependencyFailure = FailureAction.FAIL_TO_START
+                     onDependencyFailure = FailureAction.FAIL_TO_START
             }
+
 
             artifacts {
                 cleanDestination = true
                 artifactRules = "+:artifacts/publish/public/**/*=>artifacts/publish/public\n+:artifacts/publish/private/**/*=>artifacts/publish/private\n+:artifacts/testResults/**/*=>artifacts/testResults"
             }
+
+        }
+
+        dependency(AbsoluteId("Test_PostSharpEngineeringTestTestProduct_PublicBuild")) {
+            snapshot {
+                     onDependencyFailure = FailureAction.FAIL_TO_START
+            }
+
+
+            artifacts {
+                cleanDestination = true
+                artifactRules = "+:artifacts/publish/private/**/*=>dependencies/PostSharp.Engineering.Test.TestProduct"
+            }
+
+        }
+
+        dependency(AbsoluteId("Test_PostSharpEngineeringTestTestProduct_PublicDeployment")) {
+            snapshot {
+                     onDependencyFailure = FailureAction.FAIL_TO_START
+            }
+
+
         }
 
      }
@@ -198,7 +228,8 @@ object VersionBump : BuildType({
 
     vcs {
         root(DslContext.settingsRoot)
-    }
+
+        }
 
     steps {
         powerShell {
@@ -225,6 +256,68 @@ object VersionBump : BuildType({
             teamcitySshKey = "PostSharp.Engineering"
         }
     }
+
+})
+
+object DownstreamMerge : BuildType({
+
+    name = "Downstream Merge"
+
+    type = Type.DEPLOYMENT
+
+    vcs {
+        root(DslContext.settingsRoot)
+
+        }
+
+    steps {
+        powerShell {
+            name = "Downstream Merge"
+            scriptMode = file {
+                path = "Build.ps1"
+            }
+            noProfile = false
+            param("jetbrains_powershell_scriptArguments", "merge-downstream")
+        }
+    }
+
+    requirements {
+        equals("env.BuildAgentType", "caravela04")
+    }
+
+    features {
+        swabra {
+            lockingProcesses = Swabra.LockingProcessPolicy.KILL
+            verbose = true
+        }
+        sshAgent {
+            // By convention, the SSH key name is always PostSharp.Engineering for all repositories using SSH to connect.
+            teamcitySshKey = "PostSharp.Engineering"
+        }
+    }
+
+    triggers {
+
+        vcs {
+            watchChangesInDependencies = true
+            branchFilter = "+:<default>"
+            // Build will not trigger automatically if the commit message contains comment value.
+            triggerRules = "-:comment=<<VERSION_BUMP>>|<<DEPENDENCIES_UPDATED>>:**"
+        }        
+
+    }
+
+    dependencies {
+
+        dependency(AbsoluteId("DebugBuild")) {
+            snapshot {
+                     onDependencyFailure = FailureAction.FAIL_TO_START
+            }
+
+
+        }
+
+     }
 
 })
 
