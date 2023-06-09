@@ -17,8 +17,7 @@ project {
    buildType(PublicBuild)
    buildType(PublicDeployment)
    buildType(VersionBump)
-   buildType(DownstreamMerge)
-   buildTypesOrder = arrayListOf(DebugBuild,PublicBuild,PublicDeployment,VersionBump,DownstreamMerge)
+   buildTypesOrder = arrayListOf(DebugBuild,PublicBuild,PublicDeployment,VersionBump)
 }
 
 object DebugBuild : BuildType({
@@ -50,10 +49,21 @@ object DebugBuild : BuildType({
             noProfile = false
             param("jetbrains_powershell_scriptArguments", "test --configuration Debug --buildNumber %build.number% --buildType %system.teamcity.buildType.id%")
         }
+
+        // Step to kill all dotnet or VBCSCompiler processes that might be locking files that Swabra deletes in the beginning of another build.
+        powerShell {
+            name = "Kill background processes after build"
+            scriptMode = file {
+                path = "Build.ps1"
+            }
+            noProfile = false
+            param("jetbrains_powershell_scriptArguments", "tools kill")
+            executionMode = BuildStep.ExecutionMode.ALWAYS
+        }
     }
 
     requirements {
-        equals("env.BuildAgentType", "caravela04")
+        equals("env.BuildAgentType", "caravela04cloud")
     }
 
     features {
@@ -63,9 +73,20 @@ object DebugBuild : BuildType({
         }
     }
 
+    triggers {
+
+        vcs {
+            watchChangesInDependencies = true
+            branchFilter = "+:<default>"
+            // Build will not trigger automatically if the commit message contains comment value.
+            triggerRules = "-:comment=<<VERSION_BUMP>>|<<DEPENDENCIES_UPDATED>>:**"
+        }        
+
+    }
+
     dependencies {
 
-        dependency(AbsoluteId("Test_PostSharpEngineeringTestTestProduct_DebugBuild")) {
+        dependency(AbsoluteId("Test_Test20232_TestProduct_DebugBuild")) {
             snapshot {
                      onDependencyFailure = FailureAction.FAIL_TO_START
             }
@@ -111,10 +132,21 @@ object PublicBuild : BuildType({
             noProfile = false
             param("jetbrains_powershell_scriptArguments", "test --configuration Public --buildNumber %build.number% --buildType %system.teamcity.buildType.id%")
         }
+
+        // Step to kill all dotnet or VBCSCompiler processes that might be locking files that Swabra deletes in the beginning of another build.
+        powerShell {
+            name = "Kill background processes after build"
+            scriptMode = file {
+                path = "Build.ps1"
+            }
+            noProfile = false
+            param("jetbrains_powershell_scriptArguments", "tools kill")
+            executionMode = BuildStep.ExecutionMode.ALWAYS
+        }
     }
 
     requirements {
-        equals("env.BuildAgentType", "caravela04")
+        equals("env.BuildAgentType", "caravela04cloud")
     }
 
     features {
@@ -126,7 +158,7 @@ object PublicBuild : BuildType({
 
     dependencies {
 
-        dependency(AbsoluteId("Test_PostSharpEngineeringTestTestProduct_PublicBuild")) {
+        dependency(AbsoluteId("Test_Test20232_TestProduct_PublicBuild")) {
             snapshot {
                      onDependencyFailure = FailureAction.FAIL_TO_START
             }
@@ -163,10 +195,21 @@ object PublicDeployment : BuildType({
             noProfile = false
             param("jetbrains_powershell_scriptArguments", "publish --configuration Public")
         }
+
+        // Step to kill all dotnet or VBCSCompiler processes that might be locking files that Swabra deletes in the beginning of another build.
+        powerShell {
+            name = "Kill background processes after build"
+            scriptMode = file {
+                path = "Build.ps1"
+            }
+            noProfile = false
+            param("jetbrains_powershell_scriptArguments", "tools kill")
+            executionMode = BuildStep.ExecutionMode.ALWAYS
+        }
     }
 
     requirements {
-        equals("env.BuildAgentType", "caravela04")
+        equals("env.BuildAgentType", "caravela04cloud")
     }
 
     features {
@@ -195,7 +238,7 @@ object PublicDeployment : BuildType({
 
         }
 
-        dependency(AbsoluteId("Test_PostSharpEngineeringTestTestProduct_PublicBuild")) {
+        dependency(AbsoluteId("Test_Test20232_TestProduct_PublicBuild")) {
             snapshot {
                      onDependencyFailure = FailureAction.FAIL_TO_START
             }
@@ -208,7 +251,7 @@ object PublicDeployment : BuildType({
 
         }
 
-        dependency(AbsoluteId("Test_PostSharpEngineeringTestTestProduct_PublicDeployment")) {
+        dependency(AbsoluteId("Test_Test20232_TestProduct_PublicDeployment")) {
             snapshot {
                      onDependencyFailure = FailureAction.FAIL_TO_START
             }
@@ -240,49 +283,21 @@ object VersionBump : BuildType({
             noProfile = false
             param("jetbrains_powershell_scriptArguments", "bump")
         }
-    }
 
-    requirements {
-        equals("env.BuildAgentType", "caravela04")
-    }
-
-    features {
-        swabra {
-            lockingProcesses = Swabra.LockingProcessPolicy.KILL
-            verbose = true
-        }
-        sshAgent {
-            // By convention, the SSH key name is always PostSharp.Engineering for all repositories using SSH to connect.
-            teamcitySshKey = "PostSharp.Engineering"
-        }
-    }
-
-})
-
-object DownstreamMerge : BuildType({
-
-    name = "Downstream Merge"
-
-    type = Type.DEPLOYMENT
-
-    vcs {
-        root(DslContext.settingsRoot)
-
-        }
-
-    steps {
+        // Step to kill all dotnet or VBCSCompiler processes that might be locking files that Swabra deletes in the beginning of another build.
         powerShell {
-            name = "Downstream Merge"
+            name = "Kill background processes after build"
             scriptMode = file {
                 path = "Build.ps1"
             }
             noProfile = false
-            param("jetbrains_powershell_scriptArguments", "merge-downstream")
+            param("jetbrains_powershell_scriptArguments", "tools kill")
+            executionMode = BuildStep.ExecutionMode.ALWAYS
         }
     }
 
     requirements {
-        equals("env.BuildAgentType", "caravela04")
+        equals("env.BuildAgentType", "caravela04cloud")
     }
 
     features {
@@ -295,29 +310,6 @@ object DownstreamMerge : BuildType({
             teamcitySshKey = "PostSharp.Engineering"
         }
     }
-
-    triggers {
-
-        vcs {
-            watchChangesInDependencies = true
-            branchFilter = "+:<default>"
-            // Build will not trigger automatically if the commit message contains comment value.
-            triggerRules = "-:comment=<<VERSION_BUMP>>|<<DEPENDENCIES_UPDATED>>:**"
-        }        
-
-    }
-
-    dependencies {
-
-        dependency(AbsoluteId("DebugBuild")) {
-            snapshot {
-                     onDependencyFailure = FailureAction.FAIL_TO_START
-            }
-
-
-        }
-
-     }
 
 })
 

@@ -45,3 +45,4 @@ launchSettings.json
 *.g.props
 *.log
 *.idea/
+/dependencies

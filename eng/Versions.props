@@ -12,8 +12,8 @@
     
     <!-- Set the default versions of dependencies -->
     <PropertyGroup>
-        <PostSharpEngineeringVersion>2023.1.12-preview</PostSharpEngineeringVersion>
-        <PostSharpEngineeringTestTestProductVersion>2023.1.0-preview</PostSharpEngineeringTestTestProductVersion>
+        <PostSharpEngineeringVersion>2023.2.4-preview</PostSharpEngineeringVersion>
+        <PostSharpEngineeringTestTestProductVersion>2023.2.0-preview</PostSharpEngineeringTestTestProductVersion>
     </PropertyGroup>
 
     <!-- Override versions (both this product and dependencies) for the local build -->
