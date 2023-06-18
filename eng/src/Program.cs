@@ -19,10 +19,7 @@ var product = new Product( TestDependencies.GitHub )
             MSBuildName: "Release",
             PublicPublishers: new Publisher[]
             {
-                new TestPublisher( Pattern.Create( "*.nupkg" ) ),
-
-                // MergePublisher is temporarily disabled for 2023.1
-                //new MergePublisher()
+                new TestPublisher( Pattern.Create( "*.nupkg" ) )
             } ) )
 };
 
