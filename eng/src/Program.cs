@@ -5,23 +5,21 @@ using PostSharp.Engineering.BuildTools;
 using PostSharp.Engineering.BuildTools.Build;
 using PostSharp.Engineering.BuildTools.Build.Model;
 using PostSharp.Engineering.BuildTools.Build.Solutions;
-using PostSharp.Engineering.BuildTools.Dependencies.Model;
+using PostSharp.Engineering.BuildTools.Dependencies.Definitions;
 using Spectre.Console.Cli;
+using TestDependencies = PostSharp.Engineering.BuildTools.Dependencies.Definitions.TestDependencies.V2023_1;
 
 var product = new Product( TestDependencies.GitHub )
 {
     Solutions = new Solution[] { new DotNetSolution( "src\\PostSharp.Engineering.Test.GitHub.sln" ) },
     PublicArtifacts = Pattern.Create( "PostSharp.Engineering.Test.GitHub.$(PackageVersion).nupkg" ),
-    Dependencies = new[] { Dependencies.PostSharpEngineering, TestDependencies.TestProduct },
+    Dependencies = new[] { DevelopmentDependencies.PostSharpEngineering, TestDependencies.TestProduct },
     Configurations = Product.DefaultConfigurations
         .WithValue( BuildConfiguration.Public, new BuildConfigurationInfo( 
             MSBuildName: "Release",
             PublicPublishers: new Publisher[]
             {
-                new TestPublisher( Pattern.Create( "*.nupkg" ) ),
-
-                // MergePublisher is temporarily disabled for 2023.1
-                //new MergePublisher()
+                new TestPublisher( Pattern.Create( "*.nupkg" ) )
             } ) )
 };
 

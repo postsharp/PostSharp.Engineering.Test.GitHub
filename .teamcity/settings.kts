@@ -6,6 +6,7 @@ import jetbrains.buildServer.configs.kotlin.v2019_2.*
 import jetbrains.buildServer.configs.kotlin.v2019_2.buildFeatures.sshAgent
 import jetbrains.buildServer.configs.kotlin.v2019_2.buildFeatures.Swabra
 import jetbrains.buildServer.configs.kotlin.v2019_2.buildFeatures.swabra
+import jetbrains.buildServer.configs.kotlin.v2019_2.failureConditions.*
 import jetbrains.buildServer.configs.kotlin.v2019_2.buildSteps.powerShell
 import jetbrains.buildServer.configs.kotlin.v2019_2.triggers.*
 
@@ -17,7 +18,8 @@ project {
    buildType(PublicBuild)
    buildType(PublicDeployment)
    buildType(VersionBump)
-   buildTypesOrder = arrayListOf(DebugBuild,PublicBuild,PublicDeployment,VersionBump)
+   buildType(DownstreamMerge)
+   buildTypesOrder = arrayListOf(DebugBuild,PublicBuild,PublicDeployment,VersionBump,DownstreamMerge)
 }
 
 object DebugBuild : BuildType({
@@ -28,8 +30,7 @@ object DebugBuild : BuildType({
 
     vcs {
         root(DslContext.settingsRoot)
-
-        }
+    }
 
     steps {
         // Step to kill all dotnet or VBCSCompiler processes that might be locking files we delete in during cleanup.
@@ -48,6 +49,19 @@ object DebugBuild : BuildType({
             }
             noProfile = false
             param("jetbrains_powershell_scriptArguments", "test --configuration Debug --buildNumber %build.number% --buildType %system.teamcity.buildType.id%")
+        }
+    }
+
+    failureConditions {
+        failOnMetricChange {
+            metric = BuildFailureOnMetric.MetricType.BUILD_DURATION
+            threshold = 300
+            units = BuildFailureOnMetric.MetricUnit.DEFAULT_UNIT
+            comparison = BuildFailureOnMetric.MetricComparison.MORE
+            compareTo = build {
+                buildRule = lastSuccessful()
+            }
+            stopBuildOnFailure = true
         }
     }
 
@@ -75,7 +89,7 @@ object DebugBuild : BuildType({
 
     dependencies {
 
-        dependency(AbsoluteId("Test_Test20231_TestProduct_DebugBuild")) {
+        dependency(AbsoluteId("Test_Test20231_PostSharpEngineeringTestTestProduct_DebugBuild")) {
             snapshot {
                      onDependencyFailure = FailureAction.FAIL_TO_START
             }
@@ -100,8 +114,7 @@ object PublicBuild : BuildType({
 
     vcs {
         root(DslContext.settingsRoot)
-
-        }
+    }
 
     steps {
         // Step to kill all dotnet or VBCSCompiler processes that might be locking files we delete in during cleanup.
@@ -123,6 +136,19 @@ object PublicBuild : BuildType({
         }
     }
 
+    failureConditions {
+        failOnMetricChange {
+            metric = BuildFailureOnMetric.MetricType.BUILD_DURATION
+            threshold = 300
+            units = BuildFailureOnMetric.MetricUnit.DEFAULT_UNIT
+            comparison = BuildFailureOnMetric.MetricComparison.MORE
+            compareTo = build {
+                buildRule = lastSuccessful()
+            }
+            stopBuildOnFailure = true
+        }
+    }
+
     requirements {
         equals("env.BuildAgentType", "caravela04cloud")
     }
@@ -136,7 +162,7 @@ object PublicBuild : BuildType({
 
     dependencies {
 
-        dependency(AbsoluteId("Test_Test20231_TestProduct_PublicBuild")) {
+        dependency(AbsoluteId("Test_Test20231_PostSharpEngineeringTestTestProduct_PublicBuild")) {
             snapshot {
                      onDependencyFailure = FailureAction.FAIL_TO_START
             }
@@ -161,8 +187,7 @@ object PublicDeployment : BuildType({
 
     vcs {
         root(DslContext.settingsRoot)
-
-        }
+    }
 
     steps {
         powerShell {
@@ -172,6 +197,19 @@ object PublicDeployment : BuildType({
             }
             noProfile = false
             param("jetbrains_powershell_scriptArguments", "publish --configuration Public")
+        }
+    }
+
+    failureConditions {
+        failOnMetricChange {
+            metric = BuildFailureOnMetric.MetricType.BUILD_DURATION
+            threshold = 300
+            units = BuildFailureOnMetric.MetricUnit.DEFAULT_UNIT
+            comparison = BuildFailureOnMetric.MetricComparison.MORE
+            compareTo = build {
+                buildRule = lastSuccessful()
+            }
+            stopBuildOnFailure = true
         }
     }
 
@@ -205,7 +243,7 @@ object PublicDeployment : BuildType({
 
         }
 
-        dependency(AbsoluteId("Test_Test20231_TestProduct_PublicBuild")) {
+        dependency(AbsoluteId("Test_Test20231_PostSharpEngineeringTestTestProduct_PublicBuild")) {
             snapshot {
                      onDependencyFailure = FailureAction.FAIL_TO_START
             }
@@ -218,7 +256,7 @@ object PublicDeployment : BuildType({
 
         }
 
-        dependency(AbsoluteId("Test_Test20231_TestProduct_PublicDeployment")) {
+        dependency(AbsoluteId("Test_Test20231_PostSharpEngineeringTestTestProduct_PublicDeployment")) {
             snapshot {
                      onDependencyFailure = FailureAction.FAIL_TO_START
             }
@@ -238,8 +276,7 @@ object VersionBump : BuildType({
 
     vcs {
         root(DslContext.settingsRoot)
-
-        }
+    }
 
     steps {
         powerShell {
@@ -249,6 +286,19 @@ object VersionBump : BuildType({
             }
             noProfile = false
             param("jetbrains_powershell_scriptArguments", "bump")
+        }
+    }
+
+    failureConditions {
+        failOnMetricChange {
+            metric = BuildFailureOnMetric.MetricType.BUILD_DURATION
+            threshold = 300
+            units = BuildFailureOnMetric.MetricUnit.DEFAULT_UNIT
+            comparison = BuildFailureOnMetric.MetricComparison.MORE
+            compareTo = build {
+                buildRule = lastSuccessful()
+            }
+            stopBuildOnFailure = true
         }
     }
 
@@ -266,6 +316,80 @@ object VersionBump : BuildType({
             teamcitySshKey = "PostSharp.Engineering"
         }
     }
+
+})
+
+object DownstreamMerge : BuildType({
+
+    name = "Downstream Merge"
+
+    type = Type.DEPLOYMENT
+
+    vcs {
+        root(DslContext.settingsRoot)
+    }
+
+    steps {
+        powerShell {
+            name = "Downstream Merge"
+            scriptMode = file {
+                path = "Build.ps1"
+            }
+            noProfile = false
+            param("jetbrains_powershell_scriptArguments", "merge-downstream")
+        }
+    }
+
+    failureConditions {
+        failOnMetricChange {
+            metric = BuildFailureOnMetric.MetricType.BUILD_DURATION
+            threshold = 300
+            units = BuildFailureOnMetric.MetricUnit.DEFAULT_UNIT
+            comparison = BuildFailureOnMetric.MetricComparison.MORE
+            compareTo = build {
+                buildRule = lastSuccessful()
+            }
+            stopBuildOnFailure = true
+        }
+    }
+
+    requirements {
+        equals("env.BuildAgentType", "caravela04cloud")
+    }
+
+    features {
+        swabra {
+            lockingProcesses = Swabra.LockingProcessPolicy.KILL
+            verbose = true
+        }
+        sshAgent {
+            // By convention, the SSH key name is always PostSharp.Engineering for all repositories using SSH to connect.
+            teamcitySshKey = "PostSharp.Engineering"
+        }
+    }
+
+    triggers {
+
+        vcs {
+            watchChangesInDependencies = true
+            branchFilter = "+:<default>"
+            // Build will not trigger automatically if the commit message contains comment value.
+            triggerRules = "-:comment=<<VERSION_BUMP>>|<<DEPENDENCIES_UPDATED>>:**"
+        }        
+
+    }
+
+    dependencies {
+
+        dependency(DebugBuild) {
+            snapshot {
+                     onDependencyFailure = FailureAction.FAIL_TO_START
+            }
+
+
+        }
+
+     }
 
 })
 
