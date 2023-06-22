@@ -12,7 +12,7 @@
     
     <!-- Set the default versions of dependencies -->
     <PropertyGroup>
-        <PostSharpEngineeringVersion>2023.2.14</PostSharpEngineeringVersion>
+        <PostSharpEngineeringVersion>2023.2.15</PostSharpEngineeringVersion>
         <PostSharpEngineeringTestTestProductVersion>2023.2.0-preview</PostSharpEngineeringTestTestProductVersion>
     </PropertyGroup>
 
