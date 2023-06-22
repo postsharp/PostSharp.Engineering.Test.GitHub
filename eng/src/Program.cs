@@ -15,12 +15,8 @@ var product = new Product( TestDependencies.GitHub )
     PublicArtifacts = Pattern.Create( "PostSharp.Engineering.Test.GitHub.$(PackageVersion).nupkg" ),
     Dependencies = new[] { DevelopmentDependencies.PostSharpEngineering, TestDependencies.TestProduct },
     Configurations = Product.DefaultConfigurations
-        .WithValue( BuildConfiguration.Public, new BuildConfigurationInfo( 
-            MSBuildName: "Release",
-            PublicPublishers: new Publisher[]
-            {
-                new TestPublisher( Pattern.Create( "*.nupkg" ) )
-            } ) )
+        .WithValue( BuildConfiguration.Public,
+            b => b with { PublicPublishers = new Publisher[] { new TestPublisher( Pattern.Create( "*.nupkg" ) ) } } )
 };
 
 var commandApp = new CommandApp();
