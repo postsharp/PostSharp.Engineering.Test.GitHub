@@ -13,7 +13,6 @@
     <!-- Set the default versions of dependencies -->
     <PropertyGroup>
         <PostSharpEngineeringVersion>2023.0.148</PostSharpEngineeringVersion>
-        <PostSharpEngineeringTestTestProductVersion>2023.0.3-preview</PostSharpEngineeringTestTestProductVersion>
     </PropertyGroup>
 
     <!-- Override versions (both this product and dependencies) for the local build -->
