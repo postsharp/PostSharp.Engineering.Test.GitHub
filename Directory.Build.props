@@ -11,5 +11,6 @@
     <Import Sdk="PostSharp.Engineering.Sdk" Project="StrongName.props"/>
     <Import Sdk="PostSharp.Engineering.Sdk" Project="SourceLink.props"/>
 
+    <Import Project="C:\src\PostSharp.Engineering\PostSharp.Engineering.Import.props" />
 
 </Project>
