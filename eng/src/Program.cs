@@ -7,7 +7,7 @@ using PostSharp.Engineering.BuildTools.Build.Model;
 using PostSharp.Engineering.BuildTools.Build.Solutions;
 using PostSharp.Engineering.BuildTools.Dependencies.Definitions;
 using Spectre.Console.Cli;
-using TestDependencies = PostSharp.Engineering.BuildTools.Dependencies.Definitions.TestDependencies.V2023_2;
+using TestDependencies = PostSharp.Engineering.BuildTools.Dependencies.Definitions.TestDependencies.V2023_3;
 
 var product = new Product( TestDependencies.GitHub )
 {

@@ -1,1 +1,1 @@
-{"Dependencies":{"PostSharp.Engineering.Test.TestProduct":"2023.0.4"}}
+{"Dependencies":{"PostSharp.Engineering.Test.TestProduct":"2023.3.0"}}

@@ -94,7 +94,7 @@ object DebugBuild : BuildType({
 
     dependencies {
 
-        dependency(AbsoluteId("Test_Test20232_PostSharpEngineeringTestTestProduct_DebugBuild")) {
+        dependency(AbsoluteId("Test_Test20233_PostSharpEngineeringTestTestProduct_DebugBuild")) {
             snapshot {
                      onDependencyFailure = FailureAction.FAIL_TO_START
             }
@@ -185,7 +185,7 @@ object PublicBuild : BuildType({
 
     dependencies {
 
-        dependency(AbsoluteId("Test_Test20232_PostSharpEngineeringTestTestProduct_PublicBuild")) {
+        dependency(AbsoluteId("Test_Test20233_PostSharpEngineeringTestTestProduct_PublicBuild")) {
             snapshot {
                      onDependencyFailure = FailureAction.FAIL_TO_START
             }
@@ -271,7 +271,7 @@ object PublicDeployment : BuildType({
 
         }
 
-        dependency(AbsoluteId("Test_Test20232_PostSharpEngineeringTestTestProduct_PublicBuild")) {
+        dependency(AbsoluteId("Test_Test20233_PostSharpEngineeringTestTestProduct_PublicBuild")) {
             snapshot {
                      onDependencyFailure = FailureAction.FAIL_TO_START
             }
@@ -284,7 +284,7 @@ object PublicDeployment : BuildType({
 
         }
 
-        dependency(AbsoluteId("Test_Test20232_PostSharpEngineeringTestTestProduct_PublicDeployment")) {
+        dependency(AbsoluteId("Test_Test20233_PostSharpEngineeringTestTestProduct_PublicDeployment")) {
             snapshot {
                      onDependencyFailure = FailureAction.FAIL_TO_START
             }
