@@ -1,5 +1,4 @@
-﻿using Metalama.Backstage.Utilities;
-using My.Product;
+﻿using My.Product;
 using System.Collections;
 
 new TargetClass().TargetMethod();
