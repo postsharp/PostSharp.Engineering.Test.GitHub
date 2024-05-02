@@ -172,7 +172,11 @@ public static class ProcessUtilities
 
         if ( _isCurrentProcessUnattended == 0 )
         {
+            var w = Stopwatch.StartNew();
             _isCurrentProcessUnattended = Detect() ? 1 : 2;
+            w.Stop();
+
+            logger.Trace?.Log( $"Process unattended detection took {w.ElapsedMilliseconds} ms." );
         }
 
         return _isCurrentProcessUnattended == 1;
@@ -448,17 +452,21 @@ public static class ProcessUtilities
 
                 var pidAndCommand = output.Split( ' ', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries );
 
-                // The remaining field are command arguments.
+                // The remaining fields are command arguments.
                 if ( pidAndCommand.Length < 2 )
                 {
                     throw new InvalidOperationException( $"Unexpected output from 'ps' command: '{output}'." );
                 }
 
                 var ppid = int.Parse( pidAndCommand[0], CultureInfo.InvariantCulture );
+
+                // Examples:
+                // -bash
+                // /init
+                // /usr/bin/dotnet
                 var processName = pidAndCommand[1]
                     .Split( (char[]) ['-', '/'], StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries )
                     .Last();
-
 
                 // TODO: the name belongs to another process
                 return new ProcessInfo( ppid, processName );
