@@ -11,8 +11,7 @@ internal class AddLoggingToProjectFabric : ProjectFabric
     {
         amender
             .Outbound
-            .SelectMany( c => c.AllTypes )
-            .SelectMany( t => t.AllMethods )
+            .SelectMany( p => p.Types.SelectMany( t => t.Methods ) )
             .Where( m => m.Accessibility == Accessibility.Public )
             .AddAspectIfEligible<LogAttribute>();
     }
