@@ -1,8 +1,7 @@
 // Copyright (c) SharpCrafters s.r.o. See the LICENSE.md file in the root directory of this repository root for details.
 
 using Metalama.Backstage.Diagnostics;
-using Metalama.Backstage.Utilities;
-using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
@@ -21,6 +20,27 @@ namespace My.Product;
 
 public static class ProcessUtilities
 {
+    public sealed class ProcessInfo
+    {
+        public int ProcessId { get; }
+
+        public string? ImagePath { get; }
+
+        public string? ProcessName
+            => (RuntimeInformation.IsOSPlatform( OSPlatform.Windows )
+                    ? Path.GetFileNameWithoutExtension( this.ImagePath )
+                    : Path.GetFileName( this.ImagePath ))
+                ?.ToLowerInvariant();
+
+        public ProcessInfo( int processId, string? imageFileName )
+        {
+            this.ProcessId = processId;
+            this.ImagePath = imageFileName;
+        }
+
+        public override string ToString() => $"{this.ProcessName}({this.ProcessId})";
+    }
+
     public static ProcessKind ProcessKind
     {
         get
@@ -190,6 +210,20 @@ public static class ProcessUtilities
                 return true;
             }
 
+            // Check the parent processes.
+            var unattendedProcesses = new HashSet<string>
+            {
+                "services",
+                "java",               // TeamCity, Atlassian Bamboo (can also be "bamboo"), Jenkins, GoCD
+                "bamboo",             // Atlassian Bamboo
+                "agent.worker",       // Azure Pipelines
+                "runner.worker",      // GitHub Actions
+                "buildkite-agent",    // BuildKite
+                "circleci-agent",     // CircleCI (Docker, but has specific process name)
+                "agent",              // Semaphore CI (Linux)
+                "sshd: travis [priv]" // Travis CI (Linux)
+            };
+
             IReadOnlyList<ProcessInfo>? parentProcesses;
 
             if ( RuntimeInformation.IsOSPlatform( OSPlatform.Linux ) || RuntimeInformation.IsOSPlatform( OSPlatform.OSX ) )
@@ -202,7 +236,7 @@ public static class ProcessUtilities
                     return true;
                 }
 
-                if ( !TryGetParentProcessesOnLinuxOrMacOs( logger, out parentProcesses ) )
+                if ( !TryGetParentProcessesOnLinuxOrMacOs( logger, unattendedProcesses, out parentProcesses ) )
                 {
                     logger.Warning?.Log( "Unattended mode detected because the detection was not successful." );
 
@@ -226,21 +260,6 @@ public static class ProcessUtilities
 
                 return true;
             }
-
-            // Check the parent processes.
-            var unattendedProcesses = new HashSet<string>
-            {
-                "services",
-                "java",               // TeamCity, Atlassian Bamboo (can also be "bamboo"), Jenkins, GoCD
-                "bamboo",             // Atlassian Bamboo
-                "agent.worker",       // Azure Pipelines
-                "runner.worker",      // GitHub Actions on Windows
-                "runner",             // GitHub Actions on Linux and macOS
-                "buildkite-agent",    // BuildKite
-                "circleci-agent",     // CircleCI (Docker, but has specific process name)
-                "agent",              // Semaphore CI (Linux)
-                "sshd: travis [priv]" // Travis CI (Linux)
-            };
 
             var notUnattendedProcesses = new HashSet<string>
             {
@@ -366,7 +385,7 @@ public static class ProcessUtilities
     {
         if ( RuntimeInformation.IsOSPlatform( OSPlatform.Linux ) || RuntimeInformation.IsOSPlatform( OSPlatform.OSX ) )
         {
-            if ( !TryGetParentProcessesOnLinuxOrMacOs( logger, out var list ) )
+            if ( !TryGetParentProcessesOnLinuxOrMacOs( logger, new HashSet<string>(), out var list ) )
             {
                 throw new IOException( "Cannot get the process list." );
             }
@@ -440,6 +459,7 @@ public static class ProcessUtilities
                 Arguments = $"-o ppid= -o command= {processId}",
                 UseShellExecute = false,
                 RedirectStandardOutput = true,
+                RedirectStandardError = true,
                 CreateNoWindow = true
             };
 
@@ -480,7 +500,7 @@ public static class ProcessUtilities
         }
     }
 
-    private static bool TryGetParentProcessesOnLinuxOrMacOs( ILogger? logger, [NotNullWhen( true )] out IReadOnlyList<ProcessInfo>? list )
+    private static bool TryGetParentProcessesOnLinuxOrMacOs( ILogger? logger, IReadOnlySet<string> pivots, [NotNullWhen( true )] out IReadOnlyList<ProcessInfo>? list )
     {
         var processes = new List<ProcessInfo>();
         var parents = new HashSet<int>();
@@ -512,6 +532,11 @@ public static class ProcessUtilities
             if ( !parents.Add( parentProcessId ) )
             {
                 // There is a loop.
+                break;
+            }
+
+            if ( parentProcess.ProcessName != null && pivots.Contains( parentProcess.ProcessName ) )
+            {
                 break;
             }
         }
