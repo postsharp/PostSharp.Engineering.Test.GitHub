@@ -8,4 +8,8 @@
         <RootNamespace>My.Product</RootNamespace>
     </PropertyGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Metalama.Framework" Version="2024.1.16.1446-local-AntoninProchazka-debug" />
+    </ItemGroup>
+
 </Project>
