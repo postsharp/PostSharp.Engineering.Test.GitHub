@@ -47,13 +47,13 @@ jobs:
 
     strategy:
       matrix:
-        configuration: [Debug, Release]
+        configuration: [Debug]
 
     runs-on: windows-latest  # For a list of available runner types, refer to
                              # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
 
     env:
-      Solution_Name: src\PostSharp.Engineering.Test.GitHub.sln                        # Replace with your solution name, i.e. MyWpfApp.sln.
+      Solution_Name: src\\PostSharp.Engineering.Test.GitHub.sln                        # Replace with your solution name, i.e. MyWpfApp.sln.
 
     steps:
     - name: Checkout
@@ -67,6 +67,6 @@ jobs:
       with:
         dotnet-version: 8.0.x
 
-    # Execute all unit tests in the solution
+    # Build
     - name: Execute build
       run: dotnet build
