@@ -47,9 +47,11 @@ jobs:
 
     strategy:
       matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        dotnet-version: ['8.x']
         configuration: [Debug]
 
-    runs-on: windows-latest  # For a list of available runner types, refer to
+    runs-on: ${{ matrix.os }}  # For a list of available runner types, refer to
                              # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
 
     steps:
@@ -62,7 +64,7 @@ jobs:
     - name: Install .NET Core
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: 8.0.x
+        dotnet-version: ${{ matrix.dotnet-version }}
 
     # Build
     - name: Execute build
