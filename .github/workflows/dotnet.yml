@@ -69,4 +69,4 @@ jobs:
     # Run
     - name: Execute app
       run: dotnet run
-      working-directory: src
+      working-directory: src/PostSharp.Engineering.Test.GitHub
