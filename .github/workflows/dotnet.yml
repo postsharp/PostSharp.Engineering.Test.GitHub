@@ -66,7 +66,7 @@ jobs:
       with:
         dotnet-version: ${{ matrix.dotnet-version }}
 
-    # Build
-    - name: Execute build
-      run: dotnet build
+    # Run
+    - name: Execute app
+      run: dotnet run
       working-directory: src

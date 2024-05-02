@@ -9,6 +9,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="Metalama.Backstage" Version="2024.1.12.1235-local-AntoninProchazka-debug" />
       <PackageReference Include="Metalama.Framework" Version="2024.1.16.1446-local-AntoninProchazka-debug" />
     </ItemGroup>
 
