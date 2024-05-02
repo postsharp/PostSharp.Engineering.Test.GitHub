@@ -430,11 +430,10 @@ public static class ProcessUtilities
     {
         try
         {
-            var command = $"ps -o ppid= -p {processId}";
             var processStartInfo = new ProcessStartInfo
             {
-                FileName = "/bin/bash",
-                Arguments = $"-c \"{command}\"",
+                FileName = "ps",
+                Arguments = $"-j {processId}",
                 UseShellExecute = false,
                 RedirectStandardOutput = true,
                 CreateNoWindow = true
@@ -444,6 +443,9 @@ public static class ProcessUtilities
             {
                 cmdProcess.WaitForExit();
                 var output = cmdProcess.StandardOutput.ReadToEnd().Trim();
+
+                logger?.Trace?.Log( $"ps -j {processId} output: {output}" );
+
                 if ( int.TryParse( output, out int ppid ) && ppid != 0 )
                 {
                     return new ProcessInfo( ppid, "TODO" );
