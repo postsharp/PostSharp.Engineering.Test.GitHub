@@ -433,7 +433,7 @@ public static class ProcessUtilities
             var processStartInfo = new ProcessStartInfo
             {
                 FileName = "ps",
-                Arguments = $"-j {processId}",
+                Arguments = $"-o ppid= -o command= {processId}",
                 UseShellExecute = false,
                 RedirectStandardOutput = true,
                 CreateNoWindow = true
@@ -446,14 +446,19 @@ public static class ProcessUtilities
 
                 logger?.Trace?.Log( $"ps -j {processId} output: {output}" );
 
-                if ( int.TryParse( output, out int ppid ) && ppid != 0 )
+                var pidAndCommand = output.Split( ' ', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries );
+
+                if (pidAndCommand.Length != 2)
                 {
-                    return new ProcessInfo( ppid, "TODO" );
+                    throw new InvalidOperationException( $"Unexpected output from 'ps' command: '{output}'." );
                 }
-                else
-                {
-                    throw new InvalidOperationException( $"'{output}' doesn't represent a valid parent process ID for process '{processId}'." );
-                }
+
+                var ppid = int.Parse( pidAndCommand[0], CultureInfo.InvariantCulture );
+                var processName = pidAndCommand[1].Split( (char[]) ['-', '/'], StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries ).Last();
+
+
+                // TODO: the name belongs to another process
+                return new ProcessInfo( ppid, processName );
             }
         }
         catch ( Exception ex )
