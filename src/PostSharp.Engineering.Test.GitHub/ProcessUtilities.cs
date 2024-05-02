@@ -2,6 +2,7 @@
 
 using Metalama.Backstage.Diagnostics;
 using Metalama.Backstage.Utilities;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
@@ -197,7 +198,7 @@ public static class ProcessUtilities
                     return true;
                 }
 
-                if ( !TryGetParentProcessesOnLinux( logger, out parentProcesses ) )
+                if ( !TryGetParentProcessesOnLinuxOrMacOs( logger, out parentProcesses ) )
                 {
                     logger.Warning?.Log( "Unattended mode detected because the detection was not successful." );
 
@@ -361,7 +362,7 @@ public static class ProcessUtilities
     {
         if ( RuntimeInformation.IsOSPlatform( OSPlatform.Linux ) || RuntimeInformation.IsOSPlatform( OSPlatform.OSX ) )
         {
-            if ( !TryGetParentProcessesOnLinux( logger, out var list ) )
+            if ( !TryGetParentProcessesOnLinuxOrMacOs( logger, out var list ) )
             {
                 throw new IOException( "Cannot get the process list." );
             }
@@ -378,7 +379,90 @@ public static class ProcessUtilities
         }
     }
 
-    private static bool TryGetParentProcessesOnLinux( ILogger? logger, [NotNullWhen( true )] out IReadOnlyList<ProcessInfo>? list )
+    private static ProcessInfo GetParentProcessOnLinux( ILogger? logger, int processId )
+    {
+        // Read command name of the process.
+        string? processName;
+
+        try
+        {
+            processName = File.ReadAllText( "/proc/" + processId + "/comm" ).Trim();
+        }
+        catch ( Exception e )
+        {
+            logger?.Error?.Log( $"Could not read '/proc/{processId}/comm' file: {e.Message}" );
+            processName = null;
+        }
+
+        // Read status file of the process.
+        string? processStatus;
+
+        try
+        {
+            processStatus = File.ReadAllText( "/proc/" + processId + "/stat" );
+        }
+        catch ( Exception e )
+        {
+            logger?.Error?.Log( $"Could not read '/proc/{processId}/stat' file: {e.Message}" );
+
+            throw;
+        }
+
+        var processStatusArray = processStatus.Split( ' ' );
+        int parentProcessId;
+
+        // Try parse PPID from 4th value of status information, then add the process to list of processes.
+        try
+        {
+            parentProcessId = int.Parse( processStatusArray[3], CultureInfo.InvariantCulture );
+        }
+        catch ( Exception e )
+        {
+            logger?.Error?.Log( $"Could not parse PPID from process '{processId}' status file: {e.Message}" );
+
+            throw;
+        }
+
+        return new ProcessInfo( parentProcessId, processName );
+    }
+
+    private static ProcessInfo GetParentProcessOnMac( ILogger? logger, int processId )
+    {
+        try
+        {
+            var command = $"ps -o ppid= -p {processId}";
+            var processStartInfo = new ProcessStartInfo
+            {
+                FileName = "/bin/bash",
+                Arguments = $"-c \"{command}\"",
+                UseShellExecute = false,
+                RedirectStandardOutput = true,
+                CreateNoWindow = true
+            };
+
+            using ( var cmdProcess = Process.Start( processStartInfo ) )
+            {
+                cmdProcess.WaitForExit();
+                var output = cmdProcess.StandardOutput.ReadToEnd().Trim();
+                if ( int.TryParse( output, out int ppid ) && ppid != 0 )
+                {
+                    return new ProcessInfo( ppid, "TODO" );
+                }
+                else
+                {
+                    throw new InvalidOperationException( $"'{output}' doesn't represent a valid parent process ID for process '{processId}'." );
+                }
+            }
+        }
+        catch ( Exception ex )
+        {
+            Console.WriteLine( "Error reading parent process on macOS: " + ex.Message );
+
+            throw;
+        }
+    }
+
+    private static bool TryGetParentProcessesOnLinuxOrMacOs( ILogger? logger, [NotNullWhen( true )] out IReadOnlyList<ProcessInfo>? list )
     {
         var processes = new List<ProcessInfo>();
         var parents = new HashSet<int>();
@@ -389,58 +473,29 @@ public static class ProcessUtilities
 
         while ( parentProcessId != 0 )
         {
-            // Read command name of the process.
-            string? processName;
+            ProcessInfo parentProcess;
 
-            try
+            if ( RuntimeInformation.IsOSPlatform( OSPlatform.Linux ) )
             {
-                processName = File.ReadAllText( "/proc/" + parentProcessId + "/comm" ).Trim();
+                parentProcess = GetParentProcessOnLinux( logger, parentProcessId );
             }
-            catch ( Exception e )
+            else if ( RuntimeInformation.IsOSPlatform( OSPlatform.OSX ) )
             {
-                logger?.Error?.Log( $"Could not read '/proc/{parentProcessId}/comm' file: {e.Message}" );
-                processName = null;
+                parentProcess = GetParentProcessOnMac( logger, parentProcessId );
             }
-
-            // Read status file of the process.
-            string? processStatus;
-
-            try
+            else
             {
-                processStatus = File.ReadAllText( "/proc/" + parentProcessId + "/stat" );
-            }
-            catch ( Exception e )
-            {
-                logger?.Error?.Log( $"Could not read '/proc/{parentProcessId}/stat' file: {e.Message}" );
-
-                list = null;
-
-                return false;
+                throw new NotSupportedException( "Getting parent processes in not supported on the current platform." );
             }
 
-            var processStatusArray = processStatus.Split( ' ' );
-
-            // Try parse PPID from 4th value of status information, then add the process to list of processes.
-            try
-            {
-                parentProcessId = int.Parse( processStatusArray[3], CultureInfo.InvariantCulture );
-            }
-            catch ( Exception e )
-            {
-                logger?.Error?.Log( $"Could not parse PPID from process '{parentProcessId}' status file: {e.Message}" );
-
-                list = null;
-
-                return false;
-            }
+            processes.Add( parentProcess );
+            parentProcessId = parentProcess.ProcessId;
 
             if ( !parents.Add( parentProcessId ) )
             {
                 // There is a loop.
                 break;
             }
-
-            processes.Add( new ProcessInfo( parentProcessId, processName ) );
         }
 
         list = processes.ToArray();
