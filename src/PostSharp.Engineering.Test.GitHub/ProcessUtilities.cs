@@ -444,17 +444,20 @@ public static class ProcessUtilities
                 cmdProcess.WaitForExit();
                 var output = cmdProcess.StandardOutput.ReadToEnd().Trim();
 
-                logger?.Trace?.Log( $"ps -j {processId} output: {output}" );
+                logger?.Trace?.Log( $"ps {processId} output: {output}" );
 
                 var pidAndCommand = output.Split( ' ', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries );
 
-                if (pidAndCommand.Length != 2)
+                // The remaining field are command arguments.
+                if ( pidAndCommand.Length < 2 )
                 {
                     throw new InvalidOperationException( $"Unexpected output from 'ps' command: '{output}'." );
                 }
 
                 var ppid = int.Parse( pidAndCommand[0], CultureInfo.InvariantCulture );
-                var processName = pidAndCommand[1].Split( (char[]) ['-', '/'], StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries ).Last();
+                var processName = pidAndCommand[1]
+                    .Split( (char[]) ['-', '/'], StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries )
+                    .Last();
 
 
                 // TODO: the name belongs to another process
