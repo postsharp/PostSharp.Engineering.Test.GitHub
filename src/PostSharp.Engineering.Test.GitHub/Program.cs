@@ -18,6 +18,6 @@ new TargetClass().TargetMethod();
 //    Console.WriteLine( $"{ev.Key}: {ev.Value}" );
 //}
 
-var parentProcesses = ProcessUtilities.GetParentProcesses(new ConsoleLogger());
+//var parentProcesses = ProcessUtilities.GetParentProcesses(new ConsoleLogger());
 
-parentProcesses.ToList().ForEach( p => Console.WriteLine( $"{p.ProcessId}: {p.ProcessName} | {p.ImagePath}" ) );
+//parentProcesses.ToList().ForEach( p => Console.WriteLine( $"{p.ProcessId}: {p.ProcessName} | {p.ImagePath}" ) );
