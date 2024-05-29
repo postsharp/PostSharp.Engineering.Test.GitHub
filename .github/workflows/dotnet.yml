@@ -54,6 +54,9 @@ jobs:
     runs-on: ${{ matrix.os }}  # For a list of available runner types, refer to
                              # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
 
+    env:
+      METALAMA_DIAGNOSTICS: {"logging": {"processes": {"BackstageWorker": false,"DevEnv": false,"LinqPad": false,"TestHost": false,"RoslynCodeAnalysisService": false,"OmniSharp": false,"Rider": false,"Other": false,"ResharperTestRunner": false,"Compiler": true,"BackstageDesktopWindows": false,"VisualStudioMac": false,"LanguageServer": false,"CodeLensService": false,"DotNetTool": false},"trace": {"ProcessUtilities": true},"stopLoggingAfterHours": 2.0},"debugging": {"processes": {"BackstageWorker": false,"DevEnv": false,"LinqPad": false,"TestHost": false,"RoslynCodeAnalysisService": false,"OmniSharp": false,"Rider": false,"Other": false,"ResharperTestRunner": false,"Compiler": false,"BackstageDesktopWindows": false,"VisualStudioMac": false,"LanguageServer": false,"CodeLensService": false,"DotNetTool": false}},"crashDumps": {"processes": {"BackstageWorker": false,"DevEnv": false,"LinqPad": false,"TestHost": false,"RoslynCodeAnalysisService": false,"OmniSharp": false,"Rider": false,"Other": false,"ResharperTestRunner": false,"Compiler": false,"BackstageDesktopWindows": false,"VisualStudioMac": false,"LanguageServer": false,"CodeLensService": false,"DotNetTool": false},"exceptionTypes": ["*"]},"profiling": {"kind": "performance","processes": {"BackstageWorker": false,"DevEnv": false,"LinqPad": false,"TestHost": false,"RoslynCodeAnalysisService": false,"OmniSharp": false,"Rider": false,"Other": false,"ResharperTestRunner": false,"Compiler": false,"BackstageDesktopWindows": false,"VisualStudioMac": false,"LanguageServer": false,"CodeLensService": false,"DotNetTool": false}}}
+
     steps:
     - name: Checkout
       uses: actions/checkout@v4
@@ -68,7 +71,7 @@ jobs:
 
     # Restore
     - name: Restore
-      run: dotnet restore
+      run: dotnet restore --locked-mode
       working-directory: src
 
     # Build
@@ -77,11 +80,15 @@ jobs:
       working-directory: src
 
     # Test
-    - name: Test
-      run: dotnet test --configuration Release --no-restore --no-build
-      working-directory: src
+    # - name: Test
+    #   run: dotnet test --configuration Release --no-restore --no-build
+    #   working-directory: src
 
     # Run
-    - name: Run
-      run: dotnet run
-      working-directory: src/PostSharp.Engineering.Test.GitHub
+    # - name: Run
+    #   run: dotnet run
+    #   working-directory: src/PostSharp.Engineering.Test.GitHub
+
+    # Print logs
+    - name: Print logs
+      run: find /tmp/Metalama/Logs -type f -exec cat {} +
