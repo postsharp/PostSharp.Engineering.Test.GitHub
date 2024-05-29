@@ -72,7 +72,7 @@ jobs:
 
     # Restore
     - name: Restore
-      run: dotnet restore --locked-mode
+      run: dotnet restore
       working-directory: src
 
     # Build
