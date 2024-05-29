@@ -66,10 +66,14 @@ jobs:
       with:
         dotnet-version: ${{ matrix.dotnet-version }}
 
+    - run: dotnet restore --locked-mode
+    - run: dotnet build --configuration Release --no-restore
+    - run: dotnet test --configuration Release --no-restore --no-build
+
     # Test
-    - name: Execute tests
-      run: dotnet test
-      working-directory: src
+    # - name: Execute tests
+    #   run: dotnet test
+    #   working-directory: src
 
     # Run
     - name: Execute app
