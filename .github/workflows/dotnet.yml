@@ -69,6 +69,7 @@ jobs:
     # Test
     - name: Execute tests
       run: dotnet test
+      working-directory: src
 
     # Run
     - name: Execute app
