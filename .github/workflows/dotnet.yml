@@ -66,16 +66,22 @@ jobs:
       with:
         dotnet-version: ${{ matrix.dotnet-version }}
 
-    - run: dotnet restore --locked-mode
-    - run: dotnet build --configuration Release --no-restore
-    - run: dotnet test --configuration Release --no-restore --no-build
+    # Restore
+    - name: Restore
+      run: dotnet restore --locked-mode
+      working-directory: src
+
+    # Build
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
+      working-directory: src
 
     # Test
-    # - name: Execute tests
-    #   run: dotnet test
-    #   working-directory: src
+    - name: Test
+      run: dotnet test --configuration Release --no-restore --no-build
+      working-directory: src
 
     # Run
-    - name: Execute app
+    - name: Run
       run: dotnet run
       working-directory: src/PostSharp.Engineering.Test.GitHub
