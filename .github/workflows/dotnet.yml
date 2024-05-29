@@ -92,4 +92,5 @@ jobs:
 
     # Print logs
     - name: Print logs
+      if: always()
       run: find /tmp/Metalama/Logs -type f -exec cat {} +
