@@ -95,7 +95,7 @@ jobs:
       if: always()
       run: find /tmp/Metalama/Logs -type f -exec sh -c 'for file; do echo "==> $file <=="; cat "$file"; done' sh {} +
 
-    # Print logs
+    # Print nuget restore result
     - name: Print nuget restore result
       if: always()
-      run: find /path/to/your/folder -type f \( -name "project.assets.json" -o -name "project.nuget.cache" \) -exec sh -c 'echo "{}"; cat "{}"' \;
+      run: find src -type f \( -name "project.assets.json" -o -name "project.nuget.cache" \) -exec sh -c 'echo "{}"; cat "{}"' \;
