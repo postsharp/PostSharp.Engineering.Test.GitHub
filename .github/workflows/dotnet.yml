@@ -70,6 +70,14 @@ jobs:
       with:
         dotnet-version: ${{ matrix.dotnet-version }}
 
+    # Install Metalama Tool
+    - name: Install Metalama Tool
+      run: dotnet tool install --global Metalama.Tool --version 2024.2.7-preview
+
+    # Edit Metalama Diagnostics
+    - name: Edit Metalama Diagnostics
+      run: metalama config edit diagnostics
+
     # Configure Metalama Diagnostics
     - name: Configure Metalama Diagnostics
       run: mkdir -p /home/runner/.local/share/Metalama && cp diagnostics.json /home/runner/.local/share/Metalama/diagnostics.json
