@@ -72,7 +72,7 @@ jobs:
 
     # Configure Metalama Diagnostics
     - name: Configure Metalama Diagnostics
-      run: cp diagnostics.json /home/runner/.local/share/Metalama/diagnostics.json
+      run: mkdir -p /home/runner/.local/share/Metalama && cp diagnostics.json /home/runner/.local/share/Metalama/diagnostics.json
 
     # Restore
     - name: Restore
