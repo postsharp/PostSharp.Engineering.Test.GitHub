@@ -1,0 +1,86 @@
+{
+  "logging": {
+    "processes": {
+      "BackstageDesktopWindows": false,
+      "LanguageServer": false,
+      "CodeLensService": false,
+      "ResharperTestRunner": false,
+      "Rider": false,
+      "Other": false,
+      "RoslynCodeAnalysisService": false,
+      "OmniSharp": false,
+      "VisualStudioMac": false,
+      "LinqPad": false,
+      "TestHost": false,
+      "DotNetTool": false,
+      "BackstageWorker": false,
+      "DevEnv": false,
+      "Compiler": true
+    },
+    "trace": {
+      "*": true
+    },
+    "stopLoggingAfterHours": 2.0
+  },
+  "debugging": {
+    "processes": {
+      "BackstageDesktopWindows": false,
+      "LanguageServer": false,
+      "CodeLensService": false,
+      "ResharperTestRunner": false,
+      "Rider": false,
+      "Other": false,
+      "RoslynCodeAnalysisService": false,
+      "OmniSharp": false,
+      "VisualStudioMac": false,
+      "LinqPad": false,
+      "TestHost": false,
+      "DotNetTool": false,
+      "BackstageWorker": false,
+      "DevEnv": false,
+      "Compiler": false
+    }
+  },
+  "crashDumps": {
+    "processes": {
+      "BackstageDesktopWindows": false,
+      "LanguageServer": false,
+      "CodeLensService": false,
+      "ResharperTestRunner": false,
+      "Rider": false,
+      "Other": false,
+      "RoslynCodeAnalysisService": false,
+      "OmniSharp": false,
+      "VisualStudioMac": false,
+      "LinqPad": false,
+      "TestHost": false,
+      "DotNetTool": false,
+      "BackstageWorker": false,
+      "DevEnv": false,
+      "Compiler": false
+    },
+    "exceptionTypes": [
+      "*"
+    ]
+  },
+  "profiling": {
+    "kind": "performance",
+    "processes": {
+      "BackstageDesktopWindows": false,
+      "LanguageServer": false,
+      "CodeLensService": false,
+      "ResharperTestRunner": false,
+      "Rider": false,
+      "Other": false,
+      "RoslynCodeAnalysisService": false,
+      "OmniSharp": false,
+      "VisualStudioMac": false,
+      "LinqPad": false,
+      "TestHost": false,
+      "DotNetTool": false,
+      "BackstageWorker": false,
+      "DevEnv": false,
+      "Compiler": false
+    }
+  }
+}
