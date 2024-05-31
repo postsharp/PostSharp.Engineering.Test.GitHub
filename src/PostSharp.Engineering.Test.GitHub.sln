@@ -5,20 +5,6 @@ VisualStudioVersion = 17.0.31912.275
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PostSharp.Engineering.Test.GitHub", "PostSharp.Engineering.Test.GitHub\PostSharp.Engineering.Test.GitHub.csproj", "{028FD16B-BF1B-477B-ADF3-AE5B668C2557}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Moyou.Aspects", "Moyou.Aspects", "{6E37ABA1-292F-4CF7-AA73-586BD6D0EBE2}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Moyou.Aspects.Memento", "Moyou.Aspects\Moyou.Aspects.Memento\Moyou.Aspects.Memento.csproj", "{6523E7B1-1E5E-4A51-9D7D-BE4DDF012A02}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Moyou.Aspects.Singleton", "Moyou.Aspects\Moyou.Aspects.Singleton\Moyou.Aspects.Singleton.csproj", "{783F957A-ACB1-4A5A-A6EE-BA3B8033088B}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Moyou.Diagnostics", "Moyou.Diagnostics\Moyou.Diagnostics.csproj", "{4DDE3FAA-319A-46C3-B4AD-C20A867E6F8A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Moyou.Extensions", "Moyou.Extensions\Moyou.Extensions.csproj", "{081DF7A4-D842-4885-99DE-09ED8A2E72D9}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Moyou.CompileTimeTest", "Moyou.Test\Moyou.CompileTimeTest.csproj", "{1902920B-7AD7-4913-A9DD-FB2580BE2A0D}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Moyou.UnitTest", "Moyou.UnitTest\Moyou.UnitTest.csproj", "{70BACFAA-5429-46CE-9377-05B9F4A5E2F3}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,39 +15,11 @@ Global
 		{028FD16B-BF1B-477B-ADF3-AE5B668C2557}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{028FD16B-BF1B-477B-ADF3-AE5B668C2557}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{028FD16B-BF1B-477B-ADF3-AE5B668C2557}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6523E7B1-1E5E-4A51-9D7D-BE4DDF012A02}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6523E7B1-1E5E-4A51-9D7D-BE4DDF012A02}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6523E7B1-1E5E-4A51-9D7D-BE4DDF012A02}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6523E7B1-1E5E-4A51-9D7D-BE4DDF012A02}.Release|Any CPU.Build.0 = Release|Any CPU
-		{783F957A-ACB1-4A5A-A6EE-BA3B8033088B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{783F957A-ACB1-4A5A-A6EE-BA3B8033088B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{783F957A-ACB1-4A5A-A6EE-BA3B8033088B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{783F957A-ACB1-4A5A-A6EE-BA3B8033088B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4DDE3FAA-319A-46C3-B4AD-C20A867E6F8A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4DDE3FAA-319A-46C3-B4AD-C20A867E6F8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4DDE3FAA-319A-46C3-B4AD-C20A867E6F8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4DDE3FAA-319A-46C3-B4AD-C20A867E6F8A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{081DF7A4-D842-4885-99DE-09ED8A2E72D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{081DF7A4-D842-4885-99DE-09ED8A2E72D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{081DF7A4-D842-4885-99DE-09ED8A2E72D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{081DF7A4-D842-4885-99DE-09ED8A2E72D9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1902920B-7AD7-4913-A9DD-FB2580BE2A0D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1902920B-7AD7-4913-A9DD-FB2580BE2A0D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1902920B-7AD7-4913-A9DD-FB2580BE2A0D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1902920B-7AD7-4913-A9DD-FB2580BE2A0D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{70BACFAA-5429-46CE-9377-05B9F4A5E2F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{70BACFAA-5429-46CE-9377-05B9F4A5E2F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{70BACFAA-5429-46CE-9377-05B9F4A5E2F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{70BACFAA-5429-46CE-9377-05B9F4A5E2F3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {40D2FBCB-DC9E-4CF3-AA05-9A42E9210D2C}
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{6523E7B1-1E5E-4A51-9D7D-BE4DDF012A02} = {6E37ABA1-292F-4CF7-AA73-586BD6D0EBE2}
-		{783F957A-ACB1-4A5A-A6EE-BA3B8033088B} = {6E37ABA1-292F-4CF7-AA73-586BD6D0EBE2}
 	EndGlobalSection
 EndGlobal

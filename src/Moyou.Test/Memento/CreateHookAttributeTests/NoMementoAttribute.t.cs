@@ -1,1 +1,0 @@
-// Error LAMA0037 on `MementoCreateHook`: `The aspect 'MementoCreateHook' cannot be applied to the method 'NoMementoAttribute.CreateMementoHook()' because the declaring type 'NoMementoAttribute' must have an aspect of type MementoAttribute.`
