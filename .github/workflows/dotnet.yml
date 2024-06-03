@@ -106,6 +106,11 @@ jobs:
     #   run: dotnet run
     #   working-directory: src/PostSharp.Engineering.Test.GitHub
 
+    # List logs
+    - name: List logs
+      if: always()
+      run: ls -laR /tmp/Metalama/Logs
+
     # Print logs
     - name: Print logs
       if: always()
