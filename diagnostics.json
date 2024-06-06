@@ -13,7 +13,7 @@
       "LinqPad": false,
       "TestHost": false,
       "DotNetTool": false,
-      "BackstageWorker": false,
+      "BackstageWorker": true,
       "DevEnv": false,
       "Compiler": true
     },
