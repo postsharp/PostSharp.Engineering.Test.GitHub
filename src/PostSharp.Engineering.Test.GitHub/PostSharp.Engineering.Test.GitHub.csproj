@@ -10,7 +10,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Metalama.Framework" Version="2024.2.8.1032-local-AntoninProchazka-debug" />
+      <PackageReference Include="Metalama.Framework" Version="2024.2.8.1033-local-AntoninProchazka-debug" />
     </ItemGroup>
 
 </Project>
