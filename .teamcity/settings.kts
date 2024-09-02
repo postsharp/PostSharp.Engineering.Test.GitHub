@@ -45,7 +45,7 @@ object DebugBuild : BuildType({
                 path = "Build.ps1"
             }
             noProfile = false
-            param("jetbrains_powershell_scriptArguments", "tools kill")
+            param("jetbrains_powershell_scriptArguments", "tools kill --ci-branch %teamcity.build.branch% ")
         }
         powerShell {
             name = "Build"
@@ -53,7 +53,7 @@ object DebugBuild : BuildType({
                 path = "Build.ps1"
             }
             noProfile = false
-            param("jetbrains_powershell_scriptArguments", "test --configuration Debug --buildNumber %build.number% --buildType %system.teamcity.buildType.id% %BuildArguments%")
+            param("jetbrains_powershell_scriptArguments", "test --configuration Debug --buildNumber %build.number% --buildType %system.teamcity.buildType.id% --ci-branch %teamcity.build.branch%  %BuildArguments%")
         }
         powerShell {
             name = "Kill background processes before next build"
@@ -61,7 +61,7 @@ object DebugBuild : BuildType({
                 path = "Build.ps1"
             }
             noProfile = false
-            param("jetbrains_powershell_scriptArguments", "tools kill")
+            param("jetbrains_powershell_scriptArguments", "tools kill --ci-branch %teamcity.build.branch% ")
         }
     }
 
@@ -135,7 +135,7 @@ object ReleaseBuild : BuildType({
                 path = "Build.ps1"
             }
             noProfile = false
-            param("jetbrains_powershell_scriptArguments", "tools kill")
+            param("jetbrains_powershell_scriptArguments", "tools kill --ci-branch %teamcity.build.branch% ")
         }
         powerShell {
             name = "Build"
@@ -143,7 +143,7 @@ object ReleaseBuild : BuildType({
                 path = "Build.ps1"
             }
             noProfile = false
-            param("jetbrains_powershell_scriptArguments", "test --configuration Release --buildNumber %build.number% --buildType %system.teamcity.buildType.id% %BuildArguments%")
+            param("jetbrains_powershell_scriptArguments", "test --configuration Release --buildNumber %build.number% --buildType %system.teamcity.buildType.id% --ci-branch %teamcity.build.branch%  %BuildArguments%")
         }
         powerShell {
             name = "Kill background processes before next build"
@@ -151,7 +151,7 @@ object ReleaseBuild : BuildType({
                 path = "Build.ps1"
             }
             noProfile = false
-            param("jetbrains_powershell_scriptArguments", "tools kill")
+            param("jetbrains_powershell_scriptArguments", "tools kill --ci-branch %teamcity.build.branch% ")
         }
     }
 
@@ -216,7 +216,7 @@ object PublicBuild : BuildType({
                 path = "Build.ps1"
             }
             noProfile = false
-            param("jetbrains_powershell_scriptArguments", "tools kill")
+            param("jetbrains_powershell_scriptArguments", "tools kill --ci-branch %teamcity.build.branch% ")
         }
         powerShell {
             name = "Build"
@@ -224,7 +224,7 @@ object PublicBuild : BuildType({
                 path = "Build.ps1"
             }
             noProfile = false
-            param("jetbrains_powershell_scriptArguments", "test --configuration Public --buildNumber %build.number% --buildType %system.teamcity.buildType.id% %BuildArguments%")
+            param("jetbrains_powershell_scriptArguments", "test --configuration Public --buildNumber %build.number% --buildType %system.teamcity.buildType.id% --ci-branch %teamcity.build.branch%  %BuildArguments%")
         }
         powerShell {
             name = "Kill background processes before next build"
@@ -232,7 +232,7 @@ object PublicBuild : BuildType({
                 path = "Build.ps1"
             }
             noProfile = false
-            param("jetbrains_powershell_scriptArguments", "tools kill")
+            param("jetbrains_powershell_scriptArguments", "tools kill --ci-branch %teamcity.build.branch% ")
         }
     }
 
@@ -297,7 +297,7 @@ object PublicDeployment : BuildType({
                 path = "Build.ps1"
             }
             noProfile = false
-            param("jetbrains_powershell_scriptArguments", "publish --configuration Public %PublishArguments%")
+            param("jetbrains_powershell_scriptArguments", "publish --configuration Public --ci-branch %teamcity.build.branch%  %PublishArguments%")
         }
     }
 
@@ -379,7 +379,7 @@ object VersionBump : BuildType({
                 path = "Build.ps1"
             }
             noProfile = false
-            param("jetbrains_powershell_scriptArguments", "bump %BumpArguments%")
+            param("jetbrains_powershell_scriptArguments", "bump --ci-branch %teamcity.build.branch%  %BumpArguments%")
         }
     }
 
@@ -432,7 +432,7 @@ object DownstreamMerge : BuildType({
                 path = "Build.ps1"
             }
             noProfile = false
-            param("jetbrains_powershell_scriptArguments", "tools git merge-downstream %DownstreamMergeArguments%")
+            param("jetbrains_powershell_scriptArguments", "tools git merge-downstream --ci-branch %teamcity.build.branch%  %DownstreamMergeArguments%")
         }
     }
 
