@@ -12,7 +12,7 @@
     
     <!-- Set the default versions of dependencies -->
     <PropertyGroup>
-        <PostSharpEngineeringVersion>2023.1.20-preview</PostSharpEngineeringVersion>
+        <PostSharpEngineeringVersion>2023.1.21-preview</PostSharpEngineeringVersion>
     </PropertyGroup>
 
     <!-- Set the deafult versions of auto-updated dependencies -->
