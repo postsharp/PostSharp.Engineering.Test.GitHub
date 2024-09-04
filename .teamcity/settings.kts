@@ -35,7 +35,7 @@ object DebugBuild : BuildType({
         text("TimeOut", "300", label = "Time-Out Threshold", description = "Seconds after the duration of the last successful build.", regex = """\d+""", validationMessage = "The timeout has to be an integer number.")
     }
     vcs {
-        root(DslContext.settingsRoot)
+        root(AbsoluteId("Test_Test20231_PostSharpEngineeringTestGitHub"))
     }
 
     steps {
@@ -92,7 +92,7 @@ object DebugBuild : BuildType({
     triggers {
         vcs {
             watchChangesInDependencies = true
-            branchFilter = "+:<default>"
+            branchFilter = "+:develop/2023.1"
             // Build will not trigger automatically if the commit message contains comment value.
             triggerRules = "-:comment=<<VERSION_BUMP>>|<<DEPENDENCIES_UPDATED>>:**"
         }
@@ -126,7 +126,7 @@ object ReleaseBuild : BuildType({
         text("TimeOut", "300", label = "Time-Out Threshold", description = "Seconds after the duration of the last successful build.", regex = """\d+""", validationMessage = "The timeout has to be an integer number.")
     }
     vcs {
-        root(DslContext.settingsRoot)
+        root(AbsoluteId("Test_Test20231_PostSharpEngineeringTestGitHub"))
     }
 
     steps {
@@ -208,7 +208,7 @@ object PublicBuild : BuildType({
         text("TimeOut", "300", label = "Time-Out Threshold", description = "Seconds after the duration of the last successful build.", regex = """\d+""", validationMessage = "The timeout has to be an integer number.")
     }
     vcs {
-        root(DslContext.settingsRoot)
+        root(AbsoluteId("Test_Test20231_PostSharpEngineeringTestGitHub"))
     }
 
     steps {
@@ -290,7 +290,7 @@ object PublicDeployment : BuildType({
         text("TimeOut", "300", label = "Time-Out Threshold", description = "Seconds after the duration of the last successful build.", regex = """\d+""", validationMessage = "The timeout has to be an integer number.")
     }
     vcs {
-        root(DslContext.settingsRoot)
+        root(AbsoluteId("Test_Test20231_PostSharpEngineeringTestGitHub"))
     }
 
     steps {
@@ -373,7 +373,7 @@ object DownstreamMerge : BuildType({
         text("TimeOut", "300", label = "Time-Out Threshold", description = "Seconds after the duration of the last successful build.", regex = """\d+""", validationMessage = "The timeout has to be an integer number.")
     }
     vcs {
-        root(DslContext.settingsRoot)
+        root(AbsoluteId("Test_Test20231_PostSharpEngineeringTestGitHub"))
     }
 
     steps {
@@ -418,7 +418,7 @@ object DownstreamMerge : BuildType({
     triggers {
         vcs {
             watchChangesInDependencies = true
-            branchFilter = "+:<default>"
+            branchFilter = "+:develop/2023.1"
             // Build will not trigger automatically if the commit message contains comment value.
             triggerRules = "-:comment=<<VERSION_BUMP>>|<<DEPENDENCIES_UPDATED>>:**"
         }
