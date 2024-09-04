@@ -2,7 +2,7 @@
 <Project>
 
     <PropertyGroup>
-        <PostSharpEngineeringTestTestProductVersion>2023.1.8-preview</PostSharpEngineeringTestTestProductVersion>
+        <PostSharpEngineeringTestTestProductVersion>2023.1.9-preview</PostSharpEngineeringTestTestProductVersion>
     </PropertyGroup>
 
 </Project>
