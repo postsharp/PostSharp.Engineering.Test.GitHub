@@ -42,7 +42,7 @@ object DebugBuild : BuildType({
     steps {
         powerShell {
             name = "Kill background processes before cleanup"
-            id = "Kill"
+            id = "PreKill"
             scriptMode = file {
                 path = "Build.ps1"
             }
@@ -60,7 +60,7 @@ object DebugBuild : BuildType({
         }
         powerShell {
             name = "Kill background processes before next build"
-            id = "Kill"
+            id = "PostKill"
             scriptMode = file {
                 path = "Build.ps1"
             }
@@ -136,7 +136,7 @@ object ReleaseBuild : BuildType({
     steps {
         powerShell {
             name = "Kill background processes before cleanup"
-            id = "Kill"
+            id = "PreKill"
             scriptMode = file {
                 path = "Build.ps1"
             }
@@ -154,7 +154,7 @@ object ReleaseBuild : BuildType({
         }
         powerShell {
             name = "Kill background processes before next build"
-            id = "Kill"
+            id = "PostKill"
             scriptMode = file {
                 path = "Build.ps1"
             }
@@ -221,7 +221,7 @@ object PublicBuild : BuildType({
     steps {
         powerShell {
             name = "Kill background processes before cleanup"
-            id = "Kill"
+            id = "PreKill"
             scriptMode = file {
                 path = "Build.ps1"
             }
@@ -239,7 +239,7 @@ object PublicBuild : BuildType({
         }
         powerShell {
             name = "Kill background processes before next build"
-            id = "Kill"
+            id = "PostKill"
             scriptMode = file {
                 path = "Build.ps1"
             }
