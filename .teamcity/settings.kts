@@ -34,6 +34,7 @@ object DebugBuild : BuildType({
         text("DefaultBranch", "develop/2023.1", label = "Default Branch", description = "The default branch of this build configuration.")
         text("TimeOut", "300", label = "Time-Out Threshold", description = "Seconds after the duration of the last successful build.", regex = """\d+""", validationMessage = "The timeout has to be an integer number.")
     }
+
     vcs {
         root(AbsoluteId("Test_Test20231_PostSharpEngineeringTestGitHub"))
     }
@@ -41,27 +42,30 @@ object DebugBuild : BuildType({
     steps {
         powerShell {
             name = "Kill background processes before cleanup"
+            id = "Kill"
             scriptMode = file {
                 path = "Build.ps1"
             }
             noProfile = false
-            param("jetbrains_powershell_scriptArguments", "tools kill")
+            scriptArgs = "tools kill"
         }
         powerShell {
             name = "Build"
+            id = "Build"
             scriptMode = file {
                 path = "Build.ps1"
             }
             noProfile = false
-            param("jetbrains_powershell_scriptArguments", "test --configuration Debug --buildNumber %build.number% --buildType %system.teamcity.buildType.id% %BuildArguments%")
+            scriptArgs = "test --configuration Debug --buildNumber %build.number% --buildType %system.teamcity.buildType.id% %BuildArguments%"
         }
         powerShell {
             name = "Kill background processes before next build"
+            id = "Kill"
             scriptMode = file {
                 path = "Build.ps1"
             }
             noProfile = false
-            param("jetbrains_powershell_scriptArguments", "tools kill")
+            scriptArgs = "tools kill"
         }
     }
 
@@ -109,7 +113,6 @@ object DebugBuild : BuildType({
                 artifactRules = "+:artifacts/publish/private/**/*=>dependencies/PostSharp.Engineering.Test.TestProduct"
             }
         }
-
      }
 
 })
@@ -125,6 +128,7 @@ object ReleaseBuild : BuildType({
         text("DefaultBranch", "develop/2023.1", label = "Default Branch", description = "The default branch of this build configuration.")
         text("TimeOut", "300", label = "Time-Out Threshold", description = "Seconds after the duration of the last successful build.", regex = """\d+""", validationMessage = "The timeout has to be an integer number.")
     }
+
     vcs {
         root(AbsoluteId("Test_Test20231_PostSharpEngineeringTestGitHub"))
     }
@@ -132,27 +136,30 @@ object ReleaseBuild : BuildType({
     steps {
         powerShell {
             name = "Kill background processes before cleanup"
+            id = "Kill"
             scriptMode = file {
                 path = "Build.ps1"
             }
             noProfile = false
-            param("jetbrains_powershell_scriptArguments", "tools kill")
+            scriptArgs = "tools kill"
         }
         powerShell {
             name = "Build"
+            id = "Build"
             scriptMode = file {
                 path = "Build.ps1"
             }
             noProfile = false
-            param("jetbrains_powershell_scriptArguments", "test --configuration Release --buildNumber %build.number% --buildType %system.teamcity.buildType.id% %BuildArguments%")
+            scriptArgs = "test --configuration Release --buildNumber %build.number% --buildType %system.teamcity.buildType.id% %BuildArguments%"
         }
         powerShell {
             name = "Kill background processes before next build"
+            id = "Kill"
             scriptMode = file {
                 path = "Build.ps1"
             }
             noProfile = false
-            param("jetbrains_powershell_scriptArguments", "tools kill")
+            scriptArgs = "tools kill"
         }
     }
 
@@ -191,7 +198,6 @@ object ReleaseBuild : BuildType({
                 artifactRules = "+:artifacts/publish/private/**/*=>dependencies/PostSharp.Engineering.Test.TestProduct"
             }
         }
-
      }
 
 })
@@ -207,6 +213,7 @@ object PublicBuild : BuildType({
         text("DefaultBranch", "develop/2023.1", label = "Default Branch", description = "The default branch of this build configuration.")
         text("TimeOut", "300", label = "Time-Out Threshold", description = "Seconds after the duration of the last successful build.", regex = """\d+""", validationMessage = "The timeout has to be an integer number.")
     }
+
     vcs {
         root(AbsoluteId("Test_Test20231_PostSharpEngineeringTestGitHub"))
     }
@@ -214,27 +221,30 @@ object PublicBuild : BuildType({
     steps {
         powerShell {
             name = "Kill background processes before cleanup"
+            id = "Kill"
             scriptMode = file {
                 path = "Build.ps1"
             }
             noProfile = false
-            param("jetbrains_powershell_scriptArguments", "tools kill")
+            scriptArgs = "tools kill"
         }
         powerShell {
             name = "Build"
+            id = "Build"
             scriptMode = file {
                 path = "Build.ps1"
             }
             noProfile = false
-            param("jetbrains_powershell_scriptArguments", "test --configuration Public --buildNumber %build.number% --buildType %system.teamcity.buildType.id% %BuildArguments%")
+            scriptArgs = "test --configuration Public --buildNumber %build.number% --buildType %system.teamcity.buildType.id% %BuildArguments%"
         }
         powerShell {
             name = "Kill background processes before next build"
+            id = "Kill"
             scriptMode = file {
                 path = "Build.ps1"
             }
             noProfile = false
-            param("jetbrains_powershell_scriptArguments", "tools kill")
+            scriptArgs = "tools kill"
         }
     }
 
@@ -273,7 +283,6 @@ object PublicBuild : BuildType({
                 artifactRules = "+:artifacts/publish/private/**/*=>dependencies/PostSharp.Engineering.Test.TestProduct"
             }
         }
-
      }
 
 })
@@ -289,6 +298,7 @@ object PublicDeployment : BuildType({
         text("DefaultBranch", "release/2023.1", label = "Default Branch", description = "The default branch of this build configuration.")
         text("TimeOut", "300", label = "Time-Out Threshold", description = "Seconds after the duration of the last successful build.", regex = """\d+""", validationMessage = "The timeout has to be an integer number.")
     }
+
     vcs {
         root(AbsoluteId("Test_Test20231_PostSharpEngineeringTestGitHub"))
     }
@@ -296,11 +306,12 @@ object PublicDeployment : BuildType({
     steps {
         powerShell {
             name = "Publish"
+            id = "Publish"
             scriptMode = file {
                 path = "Build.ps1"
             }
             noProfile = false
-            param("jetbrains_powershell_scriptArguments", "publish --configuration Public %PublishArguments%")
+            scriptArgs = "publish --configuration Public %PublishArguments%"
         }
     }
 
@@ -358,7 +369,6 @@ object PublicDeployment : BuildType({
                      onDependencyFailure = FailureAction.FAIL_TO_START
             }
         }
-
      }
 
 })
@@ -372,6 +382,7 @@ object DownstreamMerge : BuildType({
         text("DefaultBranch", "develop/2023.1", label = "Default Branch", description = "The default branch of this build configuration.")
         text("TimeOut", "300", label = "Time-Out Threshold", description = "Seconds after the duration of the last successful build.", regex = """\d+""", validationMessage = "The timeout has to be an integer number.")
     }
+
     vcs {
         root(AbsoluteId("Test_Test20231_PostSharpEngineeringTestGitHub"))
     }
@@ -379,11 +390,12 @@ object DownstreamMerge : BuildType({
     steps {
         powerShell {
             name = "Merge downstream"
+            id = "DownstreamMerge"
             scriptMode = file {
                 path = "Build.ps1"
             }
             noProfile = false
-            param("jetbrains_powershell_scriptArguments", "tools git merge-downstream %DownstreamMergeArguments%")
+            scriptArgs = "tools git merge-downstream %DownstreamMergeArguments%"
         }
     }
 
@@ -430,7 +442,6 @@ object DownstreamMerge : BuildType({
                      onDependencyFailure = FailureAction.FAIL_TO_START
             }
         }
-
      }
 
 })
