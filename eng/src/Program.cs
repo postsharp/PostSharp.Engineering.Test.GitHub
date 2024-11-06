@@ -6,21 +6,22 @@ using PostSharp.Engineering.BuildTools.Build;
 using PostSharp.Engineering.BuildTools.Build.Model;
 using PostSharp.Engineering.BuildTools.Build.Solutions;
 using PostSharp.Engineering.BuildTools.Dependencies.Definitions;
-using Spectre.Console.Cli;
 using TestDependencies = PostSharp.Engineering.BuildTools.Dependencies.Definitions.TestDependencies.V2023_2;
 
 var product = new Product( TestDependencies.GitHub )
 {
-    Solutions = new Solution[] { new DotNetSolution( "src\\PostSharp.Engineering.Test.GitHub.sln" ) },
+    Solutions = [new DotNetSolution( "src\\PostSharp.Engineering.Test.GitHub.sln" )],
     PublicArtifacts = Pattern.Create( "PostSharp.Engineering.Test.GitHub.$(PackageVersion).nupkg" ),
-    Dependencies = new[] { DevelopmentDependencies.PostSharpEngineering, TestDependencies.TestProduct },
+    Dependencies = [DevelopmentDependencies.PostSharpEngineering, TestDependencies.TestProduct],
     Configurations = Product.DefaultConfigurations
         .WithValue( BuildConfiguration.Public,
-            c => c with { PublicPublishers = new Publisher[] { new TestPublisher( Pattern.Create( "*.nupkg" ) ) } } )
+            b => b with
+            {
+                PublicPublishers =
+                [
+                    new TestPublisher( Pattern.Create( "*.nupkg" ) )
+                ]
+            } )
 };
 
-var commandApp = new CommandApp();
-
-commandApp.AddProductCommands( product );
-
-return commandApp.Run( args );
+return new EngineeringApp( product ).Run( args );
