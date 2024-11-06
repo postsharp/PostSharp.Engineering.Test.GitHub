@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <project>
   <modelVersion>4.0.0</modelVersion>
-  <name>Test_Test20231_PostSharpEngineeringTestGitHub Config DSL Script</name>
-  <groupId>Test_Test20231_PostSharpEngineeringTestGitHub</groupId>
-  <artifactId>Test_Test20231_PostSharpEngineeringTestGitHub_dsl</artifactId>
+  <name>Test_Test20232_PostSharpEngineeringTestGitHub Config DSL Script</name>
+  <groupId>Test_Test20232_PostSharpEngineeringTestGitHub</groupId>
+  <artifactId>Test_Test20232_PostSharpEngineeringTestGitHub_dsl</artifactId>
   <version>1.0-SNAPSHOT</version>
 
   <parent>
